@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MUTLULUK | Modern Turkish Cuisine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+  <!-- Navbar -->
+  <header class="bg-gray-800 shadow-lg">
+    <nav class="container mx-auto flex justify-between items-center p-6">
+      <!-- Brand -->
+      <div class="text-yellow-600 text-2xl font-bold tracking-wide">
+        MUTLULUK
+      </div>
+      <!-- Navigation Links -->
+      <ul class="flex gap-8 text-yellow-400 text-lg">
+        <li><a href="#home" class="hover:text-yellow-600">Home</a></li>
+        <li><a href="#menu" class="hover:text-yellow-600">Menu</a></li>
+        <li><a href="#reservation" class="hover:text-yellow-600">Reservation</a></li>
+        <li><a href="#contact" class="hover:text-yellow-600">Contact Us</a></li>
+        <li><a href="#employee" class="hover:text-yellow-600">Employee Portal</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <div class="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 py-16 text-center">
+    <h1 class="text-5xl font-extrabold text-yellow-500 tracking-tight mb-4">
+      Welcome to MUTLULUK
+    </h1>
+    <p class="text-lg text-gray-300">
+      Indulge in the finest Turkish & Mediterranean cuisine in Derby.
+    </p>
+    <button class="mt-6 px-6 py-3 bg-yellow-500 text-gray-900 text-lg font-bold rounded-lg hover:bg-yellow-600 transition">
+      Explore Menu
+    </button>
+  </div>
+
+  <!-- Slideshow Section -->
+  <div class="relative w-full h-[500px] mt-2">
+    <div class="absolute inset-0 overflow-hidden">
+      <img src="{% static 'images/slideshow1.jpg' %}" class="absolute w-full h-full object-cover hidden" alt="Slide 1">
+      <img src="{% static 'images/slideshow2.jpg' %}" class="absolute w-full h-full object-cover hidden" alt="Slide 2">
+      <img src="{% static 'images/slideshow3.jpg' %}" class="absolute w-full h-full object-cover hidden" alt="Slide 3">
+      <img src="{% static 'images/slideshow4.jpg' %}" class="absolute w-full h-full object-cover hidden" alt="Slide 4">
+    </div>
+  </div>
+  <script>
+    let slideIndex = 0;
+    const slides = document.querySelectorAll(".hidden");
+    const showSlides = () => {
+      slides.forEach((slide) => slide.classList.add("hidden"));
+      slideIndex++;
+      if (slideIndex > slides.length) slideIndex = 1;
+      slides[slideIndex - 1].classList.remove("hidden");
+      setTimeout(showSlides, 3000);
+    };
+    document.addEventListener("DOMContentLoaded", showSlides);
+  </script>
+
+  <!-- About Us Section -->
+  <div class="container mx-auto flex flex-wrap p-10 bg-gray-800 rounded-lg shadow-md mt-10">
+    <div class="w-full md:w-1/2 flex flex-col items-center border-r border-gray-700 px-5">
+      <img src="{% static 'images/owner.jpg' %}" alt="Owner" class="rounded-full w-2/3 shadow-xl mb-5">
+      <h2 class="text-3xl font-semibold text-yellow-500 mb-4">Meet Our Founder</h2>
+      <p class="text-center text-lg text-gray-300">
+        Driven by passion for authentic Turkish & Mediterranean flavors, our founder created MUTLULUK to bring joy to every plate.
+      </p>
+    </div>
+    <div class="w-full md:w-1/2 px-5 flex flex-col justify-center">
+      <h2 class="text-3xl font-semibold text-yellow-500 mb-4">Our Story</h2>
+      <p class="text-lg text-gray-300">
+        MUTLULUK blends tradition and innovation to create dishes that reflect the rich heritage of Turkish and Mediterranean cuisine.
+      </p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 py-6 mt-10">
+    <div class="container mx-auto text-center text-gray-400">
+      <p>&copy; 2023 MUTLULUK. All rights reserved.</p>
+      <div class="mt-4">
+        <a href="#" class="text-yellow-500 hover:text-yellow-600">Facebook</a> |
+        <a href="#" class="text-yellow-500 hover:text-yellow-600">Instagram</a> |
+        <a href="#" class="text-yellow-500 hover:text-yellow-600">Twitter</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
