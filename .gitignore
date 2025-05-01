@@ -1,0 +1,13 @@
+# Ignore Visual Studio folder
+.vs/
+
+# Python-related ignores
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Virtual environments
+venv/
+
+# Django/Media
+media/
