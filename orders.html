@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Orders</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; }
+    th, td { text-align: center; }
+  </style>
+</head>
+<body class="bg-black text-white min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-black text-[#B58B1D] p-4 flex justify-between items-center">
+    <span class="text-2xl font-bold">MUTLULUK</span>
+    <div class="space-x-8 text-lg font-semibold">
+      <a href="#" class="hover:underline">RESERVATIONS</a>
+      <a href="#" class="hover:underline text-white">ORDERS</a>
+      <a href="#" class="hover:underline">INVENTORY</a>
+      <a href="#" class="hover:underline">MY SCHEDULE</a>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <div class="text-center mt-8 mb-6">
+    <h1 class="text-4xl font-extrabold text-[#B58B1D]">Orders</h1>
+  </div>
+
+  <!-- View Orders Button -->
+  <div class="flex justify-center mb-4">
+    <a href="orders.html" class="bg-[#B58B1D] text-white px-6 py-2 rounded-md text-lg font-semibold">VIEW ORDERS</a>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="overflow-x-auto px-6">
+    <table class="w-full table-auto border-collapse border border-gray-600 text-white">
+      <thead class="text-lg border border-gray-600">
+        <tr>
+          <th class="p-2">Table No</th>
+          <th class="p-2">Time Ordered</th>
+          <th class="p-2">Items</th>
+          <th class="p-2">Additional Info</th>
+          <th class="p-2">Order Status</th>
+        </tr>
+      </thead>
+      <tbody id="ordersTable" class="text-sm border border-gray-600">
+        <!-- Orders will be loaded here dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Create Order Button -->
+  <div class="flex justify-center mt-8">
+    <a href="create_order.html" class="bg-[#B58B1D] text-white px-6 py-2 rounded-md text-lg font-semibold">CREATE ORDER</a>
+  </div>
+
+  <script>
+    const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+
+    function renderOrders() {
+      const tbody = document.getElementById("ordersTable");
+      tbody.innerHTML = "";
+
+      orders.forEach((order, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="p-2 border border-gray-600">${order.table}</td>
+          <td class="p-2 border border-gray-600">${order.time}</td>
+          <td class="p-2 border border-gray-600">${order.items}</td>
+          <td class="p-2 border border-gray-600">${order.notes || ''}</td>
+          <td class="p-2 border border-gray-600">
+            <select onchange="updateStatus(${index}, this.value)" class="bg-black text-white border border-gray-500 px-2 py-1">
+              <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
+              <option value="Ready" ${order.status === 'Ready' ? 'selected' : ''}>Ready</option>
+            </select>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function updateStatus(index, value) {
+      orders[index].status = value;
+      localStorage.setItem("orders", JSON.stringify(orders));
+      renderOrders();
+    }
+
+    renderOrders();
+  </script>
+</body>
+</html>
