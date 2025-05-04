@@ -41,8 +41,8 @@
         </div>
     {% endif %}
 
-    <!--Login Form-->>
-    <form method="POST" class="space-y-4">
+    <!--Login Form-->
+    <form method="POST" class="space-y-4" action="/core/portal/">
         {% csrf_token %}
         <div>
             <label for="username" class="block text-sm font-medium text-grey-700">Username</label>
