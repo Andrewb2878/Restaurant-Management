@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Create Order</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-black text-[#B58B1D] p-4 flex justify-between items-center">
+    <span class="text-2xl font-bold">MUTLULUK</span>
+    <div class="space-x-8 text-lg font-semibold">
+      <a href="#" class="hover:underline">RESERVATIONS</a>
+      <a href="orders.html" class="hover:underline">ORDERS</a>
+      <a href="#" class="hover:underline">INVENTORY</a>
+      <a href="#" class="hover:underline">MY SCHEDULE</a>
+    </div>
+  </nav>
+
+  <div class="max-w-xl mx-auto bg-[#1E1E1E] p-8 mt-10 rounded-xl shadow-lg space-y-6">
+    <h1 class="text-3xl font-extrabold text-[#B58B1D] text-center">CREATE ORDER</h1>
+
+    <input id="table" type="text" placeholder="Table No" class="w-full p-2 rounded-md text-black" />
+    <input id="items" type="text" placeholder="Items (comma-separated)" class="w-full p-2 rounded-md text-black" />
+    <input id="notes" type="text" placeholder="Additional info (optional)" class="w-full p-2 rounded-md text-black" />
+
+    <button onclick="submitOrder()" class="w-full bg-[#B58B1D] text-white py-2 rounded-md font-semibold">SUBMIT ORDER</button>
+  </div>
+
+  <script>
+    function submitOrder() {
+      const table = document.getElementById('table').value;
+      const items = document.getElementById('items').value;
+      const notes = document.getElementById('notes').value;
+      const time = new Date().toLocaleTimeString();
+
+      const order = {
+        table,
+        items,
+        notes,
+        time,
+        status: "Pending"
+      };
+
+      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+      orders.push(order);
+      localStorage.setItem("orders", JSON.stringify(orders));
+      window.location.href = "orders.html";
+    }
+  </script>
+</body>
+</html>

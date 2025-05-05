@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Schedule</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-900 text-white font-sans">
+        <!-- Navbar -->
+        <header class="bg-gray-800 shadow-lg">
+            <nav class="container mx-auto flex justify-between items-center p-6">
+                <div class="text-yellow-600 text-2xl font-bold tracking-wide">MUTLULUK</div>
+                <ul class="flex gap-8 text-yellow-400 text-lg">
+                    <li><a href="#home" class="hover:text-yellow-600">Home</a></li>
+                    <li><a href="{% url 'menu' %}" class="hover:text-yellow-600">Menu</a></li>
+                    <li><a href="#reservation" class="hover:text-yellow-600">Reservation</a></li>
+                    <li><a href="#contact" class="hover:text-yellow-600">Contact Us</a></li>
+                    <li><a href="#employee" class="hover:text-yellow-600">Employee Portal</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Create Schedule Section -->
+        <div class="container mx-auto mt-10 p-6 bg-gray-800 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold text-yellow-500 mb-4">Create Schedule</h2>
+            <form method="POST" action="{% url 'create_schedule' %}">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="date" class="block text-gray-300 mb-2">Date:</label>
+                    <input type="date" id="date" name="date" required class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
+                </div>
+                <div class="mb-4">
+                    <label for="shift_start" class="block text-gray-300 mb-2">Shift Start Time:</label>
+                    <input type="time" id="shift_start" name="shift_start" required class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
+                </div>
+                <div class="mb-4">
+                    <label for="shift_end" class="block text-gray-300 mb-2">Shift End Time:</label>
+                    <input type
+="time" id="shift_end" name="shift_end" required class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
+                </div>
+                <div class="mb-4">
+                    <label for="staff" class="block text-gray-300 mb-2">Select Staff:</label>
+                    <select id="staff" name="staff" required class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
+                        {% for staff in staffs %}
+                            <option value="{{ staff.id }}">{{ staff.username }}</option>  <!-- Display staff usernames -->
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="px-6 py-3 bg-yellow-500 text-gray-900 text-lg font-bold rounded-lg hover:bg-yellow-600 transition">Create Schedule</button>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 mt-10 p-6 text-center">
+            <p class="text-gray-400">&copy; 2023 MUTLULUK. All rights reserved.</p>
+        </footer>
+    </body>
+
+
+</html>
