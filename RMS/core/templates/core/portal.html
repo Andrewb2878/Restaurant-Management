@@ -27,37 +27,51 @@
 
     <!-- Hero Section -->
     <div class="bg-gradient-to-r from-grey-800 via-grey-700 to-grey-900 py-16 text-center">
-        <h1 class="text-5xl font-extrabold text-yellow-500 tracking-light mb-4"">
+        <h1 class="text-5xl font-extrabold text-yellow-500 tracking-light mb-4" ">
             Employee Login Portal
         </h1>
     </div>
 
     <!-- Error Message -->
     {% if messages %}
-        <div class="mb-4 text-red-600 text-center">
+    <div class="mb-4 text-red-600 text-center">
         {% for message in messages %}
-            <p>{{ message }}</p>
+        <p>{{ message }}</p>
         {% endfor %}
-        </div>
+    </div>
     {% endif %}
 
     <!--Login Form-->
-    <form method="POST" class="space-y-4" action="/core/portal/">
-        {% csrf_token %}
-        <div>
-            <label for="username" class="block text-sm font-medium text-grey-700">Username</label>
-            <input type="text" name="username" id="username" required 
-                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-lg focus:ring-blue-500">
-        </div>
-        <div>
-            <label for="password" class="block text-sm font-medium text-grey-700">Password</label>
-            <input type="password" name="password" id="password" required 
-                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-lg focus:ring-blue-500">
-        </div>
-        <button type="submit" 
-                class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200">
-            Login
-        </button>
-    </form>
+    <div class="flex justify-center min-h-screen bg-gray-900">
+        <form method="POST" class="space-y-4 w-full mt-10 max-w-md bg-gray-800 p-6 rounded-lg shadow-lg
+              {% if form.non_field_errors %}h-[24rem]{% else %}h-[18rem]{% endif %}"
+              action="{% url 'portal' %}">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="mb-4 p-3 bg-red-500 text-white rounded-md shadow-md text-center">
+                {% for error in form.non_field_errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-200">Username:</label>
+                <input type="text" name="username" id="username" required
+                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-lg focus:ring-blue-500 focus:outline-none text-black">
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-200">Password:</label>
+                <input type="password" name="password" id="password" required
+                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-lg focus:ring-blue-500 focus:outline-none text-black">
+            </div>
+            <button type="submit"
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200">
+                Login
+            </button>
+        </form>
+    </div>
+
 </body>
 </html>
