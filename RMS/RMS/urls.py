@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from core.views import index, menu
+from core.views import index, menu, portal
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -25,6 +25,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('admin/', admin.site.urls),
     path('menu/', menu, name='menu'),
+    path('portal/', portal, name='portal')
     path('staff-scheduling/', include('staff_scheduling.urls')),  # Link to staff scheduling app
 ]
 
