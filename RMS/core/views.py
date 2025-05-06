@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from .models import MenuItem  # Import your model
 from .models import UserProfile 
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -43,18 +43,26 @@ def portal(request):
             user = form.get_user()
             login(request, user)
 
-            # Retrieve user profile & role
-            user_profile = UserProfile.objects.get(user=user)
+            try:
+                # Retrieve user profile & role
+                user_profile = UserProfile.objects.get(user=user)
 
-            # Redirect based on role
-            if user_profile.role == "Chef":
-                return redirect("chef_dashboard")
-            elif user_profile.role == "Waiter":
-                return redirect("waiter_dashboard")
-            elif user_profile.role == "Manager":
-                return redirect("manager_dashboard")
-            else:
-                return redirect("index")  # Default fallback
+                # Redirect based on role
+                if user_profile.role == "Chef":
+                    return redirect("chef_dashboard")
+                elif user_profile.role == "Waiter":
+                    return redirect("waiter_dashboard")
+                elif user_profile.role == "Manager":
+                    return redirect("manager_dashboard")
+                else:
+                    logout(request)
+                    messages.error(request, "Your account does not have an assigned role. Please contact your manager.")
+                    return redirect("portal")  # Default fallback
+
+            except UserProfile.DoesNotExist:
+                logout(request)
+                messages.error(request, "Your account does not have a user profile. Please contact your manager.")
+                return redirect("portal")
 
     else:
         form = AuthenticationForm()
