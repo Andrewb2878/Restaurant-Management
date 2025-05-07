@@ -144,32 +144,43 @@
     </header>
 
     <!-- Main Content -->
-    <main class="p-8">
-        <div class="mb-6 text-center">
-            <h2 class="text-2xl font-semibold text-yellow-400">My Schedule</h2>
+        <main class="p-8">
+            <!-- Title -->
+            <div class="mb-6 text-center">
+                <h2 class="text-2xl font-semibold text-yellow-400">My Schedule</h2>
+            </div>
 
-            <!-- Month Selector  -->
-            <select id="monthSelector" class="p-2 bg-gray-700 text-white rounded-md shadow-soft">
-                <option value="0">January</option>
-                <option value="1">February</option>
-                <option value="2">March</option>
-                <option value="3">April</option>
-                <option value="4">May</option>
-                <option value="5" selected>June</option>
-                <option value="6">July</option>
-                <option value="7">August</option>
-                <option value="8">September</option>
-                <option value="9">October</option>
-                <option value="10">November</option>
-                <option value="11">December</option>
-            </select>
-        </div>
+            <!-- Centered Month Selector -->
+            <div class="flex justify-center">
+                <select id="monthSelector" class="p-2 bg-gray-700 text-white rounded-md shadow-md">
+                    <option value="0">January</option>
+                    <option value="1">February</option>
+                    <option value="2">March</option>
+                    <option value="3">April</option>
+                    <option value="4">May</option>
+                    <option value="5" selected>June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="8">September</option>
+                    <option value="9">October</option>
+                    <option value="10">November</option>
+                    <option value="11">December</option>
+                </select>
+            </div>
+            
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="hover:text-red-500 bg-transparent border border-red-500 px-4 py-2 rounded-md">
+                    Logout
+                </button>
+            </form>
 
-        <!-- Centered Calendar -->
-        <div class="calendar-container">
-            <div id="calendar"></div>
-        </div>
-    </main>
+
+            <!-- Centered Calendar -->
+            <div class="calendar-container">
+                <div id="calendar"></div>
+            </div>
+        </main>
 
     <!-- Modal for Shift Details -->
     <div id="modalOverlay" class="modal-overlay"></div>
