@@ -72,9 +72,22 @@
                 <a href="/manager/inventory" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
                     Reports
                 </a>
-                <a href="/manager/inventory" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
-                    Scheduling
-                </a>
+                <!-- Drop down links to Create Schedule and View Schedule -->
+                <div x-data="{ open: false }" class="relative flex flex-col">
+                    <!-- Main Dropdown Button -->
+                    <button @click="open = !open" class="w-full bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
+                        Scheduling ▼
+                    </button>
+
+                    <!-- Dropdown Menu (Ensuring Full Width) -->
+                    <div x-show="open" class="absolute w-full bg-gray-800 border border-gray-700 rounded-md shadow-lg mt-2">
+                        <a href="{% url 'create_schedule' %}" class="block px-4 py-2 text-white hover:bg-gray-700">Create Schedule</a>
+                        <a href="{% url 'view_schedules' %}" class="block px-4 py-2 text-white hover:bg-gray-700">View Schedule</a>
+                    </div>
+                </div>
+                
+                <!--  Alpine.js for Dropdown Functionality -->
+                <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x/dist/cdn.min.js" defer></script>
                 <a href="/manager/inventory" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
                     My Schedule
                 </a>

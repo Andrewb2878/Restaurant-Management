@@ -58,3 +58,4 @@ def view_schedules(request):
     return render(request, 'staff_scheduling/view_schedules.html', {'schedules': schedules, 'shifts': shifts})
 
 
+

@@ -9,7 +9,8 @@ urlpatterns = [
     path('manager-schedule/', views.manager_schedule, name='manager_schedule'),
     path('manager-dashboard/', views.manager_dashboard, name='manager_dashboard'),
     path('view-schedules/', views.view_schedules, name='view_schedules'),
-    path("logout/", auth_views.LogoutView.as_view(next_page='/'), name="logout"),  # ✅ Redirects to homepage after logout
+    path("logout/", auth_views.LogoutView.as_view(next_page='/'), name="logout"),  # Redirects to homepage after logout
+    
 
 ]
 
