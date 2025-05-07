@@ -7,24 +7,24 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white font-sans">
-  <!-- Navbar -->
-  <header class="bg-gray-800 shadow-lg">
-    <nav class="container mx-auto flex justify-between items-center p-6">
-      <!-- Brand -->
-      <div class="text-yellow-600 text-2xl font-bold tracking-wide">
-        MUTLULUK
-      </div>
-      <!-- Navigation Links -->
-      <ul class="flex gap-8 text-yellow-400 text-lg">
-        <li><a href="{% url 'index' %}" class="hover:text-yellow-600">Home</a></li>
-        <li><a href="{% url 'menu' %}" class="hover:text-yellow-600">Menu</a></li>
-        <li><a href="#reservation" class="hover:text-yellow-600">Reservation</a></li>
-        <li><a href="#contact" class="hover:text-yellow-600">Contact Us</a></li>
-        <li><a href="{% url 'portal' %}" class="hover:text-yellow-600">Employee Portal</a></li>
-      </ul>
-    </nav>
+    <!-- Navbar -->
+    <header class="bg-gray-800 shadow-lg">
+        <nav class="container mx-auto flex justify-between items-center p-6">
+            <!-- Brand -->
+            <div class="text-yellow-600 text-2xl font-bold tracking-wide">
+                MUTLULUK
+            </div>
+            <!-- Navigation Links -->
+            <ul class="flex gap-8 text-yellow-400 text-lg">
+                <li><a href="{% url 'index' %}" class="hover:text-yellow-600">Home</a></li>
+                <li><a href="{% url 'menu' %}" class="hover:text-yellow-600">Menu</a></li>
+                <li><a href="#reservation" class="hover:text-yellow-600">Reservation</a></li>
+                <li><a href="#contact" class="hover:text-yellow-600">Contact Us</a></li>
+                <li><a href="{% url 'portal' %}" class="hover:text-yellow-600">Employee Portal</a></li>
+            </ul>
+        </nav>
     </header>
-    <!-- Hero Section -->   
+    <!-- Hero Section -->
     <div class="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 py-16 text-center">
         <h1 class="text-5xl font-extrabold text-yellow-500 tracking-tight mb-4">
             Menu
@@ -35,17 +35,31 @@
     </div>
     <!-- Menu Section -->
     <div class="container mx-auto py-16">
-      <h2 class="text-3xl text-center font-bold text-white mb-8">Lunch Menu</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {% for item in menu_items %}
-          <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h3 class="text-xl font-bold text-yellow-500">{{ item.name }}</h3>
-            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-auto mt-4">
-            <p class="text-gray-300 mt-2">{{ item.description }}</p>
-            <p class="text-yellow-400 mt-4">${{ item.price }}</p>
-          </div>
-        {% empty %}
-          <p class="text-gray-300">No menu items available at the moment.</p>
-        {% endfor %}
-      </div>
+        <h2 class="text-3xl text-center font-bold text-white mb-8">Lunch Menu</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for item in menu_items %}
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-bold text-yellow-500">{{ item.name }}</h3>
+                <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-auto mt-4">
+                <p class="text-gray-300 mt-2">{{ item.description }}</p>
+                <p class="text-yellow-400 mt-4">${{ item.price }}</p>
+            </div>
+            {% empty %}
+            <p class="text-gray-300">No menu items available at the moment.</p>
+            {% endfor %}
+        </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-6 mt-10">
+        <div class="container mx-auto text-center text-gray-400">
+            <p>&copy; 2023 MUTLULUK. All rights reserved.</p>
+            <div class="mt-4">
+                <a href="#" class="text-yellow-500 hover:text-yellow-600">Facebook</a> |
+                <a href="#" class="text-yellow-500 hover:text-yellow-600">Instagram</a> |
+                <a href="#" class="text-yellow-500 hover:text-yellow-600">Twitter</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
