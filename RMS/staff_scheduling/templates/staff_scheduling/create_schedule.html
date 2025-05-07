@@ -26,36 +26,38 @@
             <h2 class="text-3xl font-bold text-yellow-500 mb-4">Create Schedule</h2>
             <form method="POST" action="{% url 'create_schedule' %}">
                 {% csrf_token %}
+                
                 <div class="mb-4">
-                    <label for="date" class="block text-gray-300 mb-2">Date:</label>
-                    <input type="date" id="date" name="date" required class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
+                    <label for="name" class="block text-gray-300 mb-2">Schedule Name:</label>
+                    <input type="text" id="name" name="name" required class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
                 </div>
+
                 <div class="mb-4">
-                    <label for="shift_start" class="block text-gray-300 mb-2">Shift Start Time:</label>
-                    <input type="time" id="shift_start" name="shift_start" required class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
+                    <label for="start_date" class="block text-gray-300 mb-2">Start Date:</label>
+                    <input type="date" id="start_date" name="start_date" required class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
                 </div>
+
                 <div class="mb-4">
-                    <label for="shift_end" class="block text-gray-300 mb-2">Shift End Time:</label>
-                    <input type
-="time" id="shift_end" name="shift_end" required class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
+                    <label for="end_date" class="block text-gray-300 mb-2">End Date:</label>
+                    <input type="date" id="end_date" name="end_date" required class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
                 </div>
+
                 <div class="mb-4">
-                    <label for="staff" class="block text-gray-300 mb-2">Select Staff:</label>
-                    <select id="staff" name="staff" required class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
+                    <label for="staff" class="block text-gray-300 mb-2">Select Staff Members:</label>
+                    <select id="staff" name="staff" multiple required class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
                         {% for staff in staffs %}
-                            <option value="{{ staff.id }}">{{ staff.username }}</option>  <!-- Display staff usernames -->
+                            <option value="{{ staff.id }}">{{ staff.username }}</option>
                         {% endfor %}
                     </select>
                 </div>
+
                 <button type="submit" class="px-6 py-3 bg-yellow-500 text-gray-900 text-lg font-bold rounded-lg hover:bg-yellow-600 transition">Create Schedule</button>
             </form>
         </div>
 
         <!-- Footer -->
         <footer class="bg-gray-800 mt-10 p-6 text-center">
-            <p class="text-gray-400">&copy; 2023 MUTLULUK. All rights reserved.</p>
+            <p class="text-gray-400">&copy; 2025 MUTLULUK. All rights reserved.</p>
         </footer>
     </body>
-
-
 </html>

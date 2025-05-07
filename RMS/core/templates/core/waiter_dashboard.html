@@ -1,28 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Waiter Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #1A1A2E;
+            color: #EAEAEA;
+            font-family: 'Inter', sans-serif;
+        }
+        .shadow-soft {
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .hover-glow:hover {
+            transform: scale(1.05);
+            transition: 0.3s ease-in-out;
+        }
+        .calendar-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 60vh;
+        }
+        .calendar-day {
+            border-radius: 8px;
+            transition: background 0.3s, transform 0.2s;
+            cursor: pointer;
+        }
+        .shift-day {
+            background-color: #28A745 !important; /* Green for shift days */
+            color: white;
+            font-weight: bold;
+        }
+        .shift-day:hover {
+            transform: scale(1.1);
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2C2C54;
+            padding: 20px;
+            width: 400px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            z-index: 1000;
+        }
+        .modal.active {
+            display: block;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .modal-overlay.active {
+            display: block;
+        }
+        .close-btn {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #E94560;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let shiftData = JSON.parse('{{ shifts_json|escapejs }}');  
+            let calendar = document.getElementById("calendar");
+            let monthSelector = document.getElementById("monthSelector");
+            let modal = document.getElementById("shiftModal");
+            let modalContent = document.getElementById("shiftContent");
+            let modalOverlay = document.getElementById("modalOverlay");
+            let closeModal = document.getElementById("closeModal");
+
+            function generateCalendar(year, month) {
+                let firstDay = new Date(year, month, 1).getDay();
+                let lastDate = new Date(year, month + 1, 0).getDate();
+                let calendarHTML = `<div class='grid grid-cols-7 gap-6 text-center text-lg max-w-lg mx-auto'>`;
+
+                let weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                for (let day of weekdays) {
+                    calendarHTML += `<div class="font-bold text-yellow-400 p-3">${day}</div>`;
+                }
+
+                for (let i = 0; i < firstDay; i++) {
+                    calendarHTML += "<div></div>";
+                }
+
+                for (let date = 1; date <= lastDate; date++) {
+                    let fullDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}`;
+                    let shiftClass = shiftData[fullDate] ? "shift-day shadow-soft" : "bg-gray-700";
+
+                    calendarHTML += `<div class="p-4 rounded-lg ${shiftClass} calendar-day hover-glow" onclick="showShift('${fullDate}')">${date}</div>`;
+                }
+
+                calendarHTML += "</div>";
+                calendar.innerHTML = calendarHTML;
+            }
+
+            // Ensures showShift is defined globally
+            window.showShift = function(date) {
+                let shiftInfo = shiftData[date] ? `<strong class="text-yellow-400">Shift Details:</strong><br>${shiftData[date].join('<br>')}` : "<span class='text-gray-400'>No shift scheduled.</span>";
+                
+                modalContent.innerHTML = shiftInfo;
+                modal.classList.add("active");
+                modalOverlay.classList.add("active");
+            };
+
+            closeModal.addEventListener("click", function() {
+                modal.classList.remove("active");
+                modalOverlay.classList.remove("active");
+            });
+
+            monthSelector.addEventListener("change", function() {
+                let selectedMonth = parseInt(this.value); 
+                generateCalendar(2025, selectedMonth);
+            });
+
+            generateCalendar(2025, 5);
+        });
+    </script>
 </head>
-<body class="bg-gray-900 text-white font-sans">
-    <header class="bg-gray-800 shadow-lg p-6">
+<body>
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg p-6 text-center">
         <h1 class="text-yellow-500 text-3xl font-bold">Waiter Dashboard</h1>
     </header>
 
+    <!-- Main Content -->
     <main class="p-8">
-        <h2 class="text-xl mb-4">All Scheduled Shifts</h2>
-        
-        {% if shifts %}
-            <ul class="space-y-2">
-                {% for shift in shifts %}
-                    <li class="p-4 bg-gray-700 rounded-md shadow-lg">
-                        {{ shift.staff.user.username }} - {{ shift.start_time }} to {{ shift.end_time }}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="text-gray-400">No shifts scheduled.</p>
-        {% endif %}
+        <div class="mb-6 text-center">
+            <h2 class="text-2xl font-semibold text-yellow-400">My Schedule</h2>
+
+            <!-- Month Selector  -->
+            <select id="monthSelector" class="p-2 bg-gray-700 text-white rounded-md shadow-soft">
+                <option value="0">January</option>
+                <option value="1">February</option>
+                <option value="2">March</option>
+                <option value="3">April</option>
+                <option value="4">May</option>
+                <option value="5" selected>June</option>
+                <option value="6">July</option>
+                <option value="7">August</option>
+                <option value="8">September</option>
+                <option value="9">October</option>
+                <option value="10">November</option>
+                <option value="11">December</option>
+            </select>
+        </div>
+
+        <!-- Centered Calendar -->
+        <div class="calendar-container">
+            <div id="calendar"></div>
+        </div>
     </main>
+
+    <!-- Modal for Shift Details -->
+    <div id="modalOverlay" class="modal-overlay"></div>
+    <div id="shiftModal" class="modal">
+        <div id="shiftContent"></div>
+        <button id="closeModal" class="close-btn">Close</button>
+    </div>
 </body>
+<footer class="bg-gray-800 mt-10 p-6 text-center">
+        <p class="text-gray-400">&copy; 2025 MUTLULUK. All rights reserved.</p>
+    </footer>
 </html>

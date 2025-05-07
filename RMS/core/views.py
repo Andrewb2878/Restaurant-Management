@@ -4,7 +4,12 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from .models import MenuItem  # Import your model
 from .models import UserProfile 
+import json
 from django.contrib.auth.decorators import login_required, user_passes_test
+from staff_scheduling.models import Schedule  # Importing the model from stuff scheduling app
+from staff_scheduling.models import Shift
+
+
 
 # Create your views here.
 def index(request):
@@ -32,7 +37,19 @@ def is_waiter(user):
 @login_required
 @user_passes_test(is_waiter)
 def waiter_dashboard(request):
-    return render(request, "core/waiter_dashboard.html")
+    shifts = Shift.objects.filter(staff=request.user)  # Fetch shifts specific to the logged-in waiter
+    
+    shifts_dict = {}
+    for shift in shifts:
+        shift_date = shift.start_time.strftime('%Y-%m-%d')  # Extract date from shift's start time
+        shift_info = f"{shift.start_time.strftime('%H:%M')} - {shift.end_time.strftime('%H:%M')} | Role: {shift.role}"
+
+        if shift_date in shifts_dict:
+            shifts_dict[shift_date].append(shift_info)  # Append multiple shifts per day
+        else:
+            shifts_dict[shift_date] = [shift_info]
+
+    return render(request, "core/waiter_dashboard.html", {"shifts_json": json.dumps(shifts_dict)})
 
 
 
