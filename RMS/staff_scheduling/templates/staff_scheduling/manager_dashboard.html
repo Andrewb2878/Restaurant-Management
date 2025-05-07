@@ -7,37 +7,123 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white font-sans">
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-800 p-4">
+        <div class="flex justify-between items-center">
+            <a href="/" class="text-yellow-400 text-xl font-bold"><i class="fas fa-utensils"></i> MUTLULUK</a>
+            <div class="space-x-4">
+                <a href="/menu" class="hover:text-yellow-500">Menu</a>
+                <a href="/reservation" class="hover:text-yellow-500">Reservations</a>
+                <a href="/manager/dashboard" class="hover:text-yellow-500">Dashboard</a>
+                <a href="/manager/reports" class="hover:text-yellow-500">Reports</a>
+                <div class="inline-flex items-center space-x-4">
+                    <form action="{% url 'logout' %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="hover:text-red-500 bg-transparent border border-red-500 px-4 py-2 rounded-md">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <!-- Header -->
-    <header class="bg-gray-800 shadow-lg p-6">
+    <header class="bg-gray-800 shadow-lg p-6 text-center">
         <h1 class="text-yellow-500 text-3xl font-bold">Manager Dashboard</h1>
+        <p class="text-gray-400">Welcome to the restaurant management dashboard.</p>
     </header>
 
     <!-- Main Content -->
     <main class="p-8">
-        <div class="mb-6 flex justify-between items-center">
-            <h2 class="text-xl font-semibold">All Scheduled Shifts</h2>
-            <a href="{% url 'create_schedule' %}" class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition">
-                Create Schedule
-            </a>
+        <!-- Stats Cards --> 
+        <div class="grid grid-cols-4 gap-6 mb-6">
+            <div class="bg-[rgb(144,122,255)] p-6 rounded-lg text-center shadow-lg border border-[rgb(130,110,240)]">
+                <h3 class="text-lg font-semibold text-white">Total Orders</h3>
+                <p class="text-3xl font-bold text-white">0</p>
+            </div>
+            <div class="bg-[rgb(122,218,138)] p-6 rounded-lg text-center shadow-lg border border-[rgb(122,218,138)]">
+                <h3 class="text-lg font-semibold text-white">Revenue</h3>
+                <p class="text-3xl font-bold text-white">$0</p>
+            </div>
+            <div class="bg-[rgb(157,130,0)] p-6 rounded-lg text-center shadow-lg border border-[rgb(157,130,0)]">
+                <h3 class="text-lg font-semibold text-gray-300">Pending Reservations</h3>
+                <p class="text-3xl font-bold text-gray-300">0</p>
+            </div>
+            <div class="bg-[rgb(254,102,102)] p-6 rounded-lg text-center shadow-lg border border-[rgb(254,102,102)]">
+                <h3 class="text-lg font-semibold text-white">Low Stock Items</h3>
+                <p class="text-3xl font-bold text-white">0</p>
+            </div>
         </div>
 
-        <!-- Shifts List -->
-        {% if shifts %}
-            <ul class="space-y-3">
-                {% for shift in shifts %}
-                    <li class="p-4 bg-gray-700 rounded-md shadow-lg">
-                        <strong>{{ shift.name }}</strong> - {{ shift.start_date }} to {{ shift.end_date }} <br>
-                        <span class="text-gray-400">Staff: 
-                            {% for member in shift.staff.all %}
-                                {{ member.username }}{% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        </span>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="text-gray-400 text-center mt-4">No shifts scheduled.</p>
-        {% endif %}
+        <!-- Quick Actions -->
+        <div class="bg-gray-900 p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold text-yellow-400">Quick Actions</h2>
+            <div class="grid grid-cols-3 gap-4 mt-4">
+                <a href="/manager/menu" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
+                    Menu Management
+                </a>
+                <a href="/manager/reservations" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
+                    Reservations
+                </a>
+                <a href="/manager/inventory" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
+                    Inventory
+                </a>
+                <a href="/manager/inventory" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
+                    Reports
+                </a>
+                <a href="/manager/inventory" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
+                    Scheduling
+                </a>
+                <a href="/manager/inventory" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
+                    My Schedule
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Orders & Reservations -->
+        <div class="grid grid-cols-2 gap-6 mt-6">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold text-yellow-400">Recent Orders</h2>
+                <table class="w-full text-left mt-4">
+                    <thead>
+                        <tr>
+                            <th class="border-b pb-2">ID</th>
+                            <th class="border-b pb-2">Table</th>
+                            <th class="border-b pb-2">Status</th>
+                            <th class="border-b pb-2">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4" class="text-center text-gray-400 p-3">No recent orders</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="/waiter/orders" class="block text-center text-yellow-400 hover:text-yellow-500 mt-3">View All Orders</a>
+            </div>
+
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold text-yellow-400">Recent Reservations</h2>
+                <table class="w-full text-left mt-4">
+                    <thead>
+                        <tr>
+                            <th class="border-b pb-2">Name</th>
+                            <th class="border-b pb-2">Date</th>
+                            <th class="border-b pb-2">Time</th>
+                            <th class="border-b pb-2">Guests</th>
+                            <th class="border-b pb-2">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5" class="text-center text-gray-400 p-3">No recent reservations</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="/manager/reservations" class="block text-center text-yellow-400 hover:text-yellow-500 mt-3">View All Reservations</a>
+            </div>
+        </div>
     </main>
 </body>
 </html>

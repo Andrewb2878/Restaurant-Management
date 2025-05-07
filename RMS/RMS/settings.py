@@ -62,7 +62,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'core/static',  # Path to the static directory in your app
 ]
 
-
+LOGOUT_REDIRECT_URL = "/"  # ✅ Redirect after logout
 # Media files (for user-uploaded content, like images)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'  # Folder where uploaded images will be stored

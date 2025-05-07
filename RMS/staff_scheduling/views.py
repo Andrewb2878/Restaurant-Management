@@ -50,4 +50,11 @@ def create_schedule(request):
 
     return render(request, 'staff_scheduling/create_schedule.html', {'form': form, 'staffs': staffs})
 
+@login_required
+@user_passes_test(is_manager)
+def view_schedules(request):  
+    schedules = Schedule.objects.all()  # Fetch all schedules
+    shifts = Shift.objects.all() # Fetch all shifts
+    return render(request, 'staff_scheduling/view_schedules.html', {'schedules': schedules, 'shifts': shifts})
+
 
