@@ -19,7 +19,7 @@
       <ul class="flex gap-8 text-yellow-400 text-lg">
         <li><a href="{% url 'index' %}" class="hover:text-yellow-600">Home</a></li>
         <li><a href="{% url 'menu' %}" class="hover:text-yellow-600">Menu</a></li>
-        <li><a href="#reservation" class="hover:text-yellow-600">Reservation</a></li>
+        <li><a href="{% url 'reservation' %}" class="hover:text-yellow-600">Reservation</a></li>
         <li><a href="#contact" class="hover:text-yellow-600">Contact Us</a></li>
         <li><a href="{% url 'portal' %}" class="hover:text-yellow-600">Employee Portal</a></li>
       </ul>
@@ -34,7 +34,7 @@
     <p class="text-lg text-gray-300">
       Indulge in the finest Turkish & Mediterranean cuisine in Derby.
     </p>
-    <button class="mt-6 px-6 py-3 bg-yellow-500 text-gray-900 text-lg font-bold rounded-lg hover:bg-yellow-600 transition">
+    <button onclick="window.location.href='/menu';" class="mt-6 px-6 py-3 bg-yellow-500 text-gray-900 text-lg font-bold rounded-lg hover:bg-yellow-600 transition">
       Explore Menu
     </button>
   </div>

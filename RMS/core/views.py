@@ -21,6 +21,8 @@ def menu(request):
     # Pass the data to the template
     return render(request, 'core/menu.html', {'menu_items': menu_items})
 
+def reservation(request):
+    return render(request, 'core/reservation.html')
 
 
 def is_chef(user):

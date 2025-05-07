@@ -10,7 +10,7 @@
     <!-- Navigation Bar -->
     <nav class="bg-gray-800 p-4">
         <div class="flex justify-between items-center">
-            <a href="/" class="text-yellow-400 text-xl font-bold"><i class="fas fa-utensils"></i> MUTLULUK</a>
+            <a href="/" class="text-yellow-600 text-xl font-bold"><i class="fas fa-utensils"></i> MUTLULUK</a>
             <div class="space-x-4">
                 <a href="/menu" class="hover:text-yellow-500">Menu</a>
                 <a href="/reservation" class="hover:text-yellow-500">Reservations</a>
@@ -36,7 +36,7 @@
 
     <!-- Main Content -->
     <main class="p-8">
-        <!-- Stats Cards --> 
+        <!-- Stats Cards -->
         <div class="grid grid-cols-4 gap-6 mb-6">
             <div class="bg-[rgb(144,122,255)] p-6 rounded-lg text-center shadow-lg border border-[rgb(130,110,240)]">
                 <h3 class="text-lg font-semibold text-white">Total Orders</h3>
@@ -80,12 +80,12 @@
                     </button>
 
                     <!-- Dropdown Menu (Ensuring Full Width) -->
-                    <div x-show="open" class="absolute w-full bg-gray-800 border border-gray-700 rounded-md shadow-lg mt-2">
+                    <div x-show="open" class="absolute w-full bg-gray-800 border border-gray-700 rounded-md shadow-lg mt-12">
                         <a href="{% url 'create_schedule' %}" class="block px-4 py-2 text-white hover:bg-gray-700">Create Schedule</a>
                         <a href="{% url 'view_schedules' %}" class="block px-4 py-2 text-white hover:bg-gray-700">View Schedule</a>
                     </div>
                 </div>
-                
+
                 <!--  Alpine.js for Dropdown Functionality -->
                 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x/dist/cdn.min.js" defer></script>
                 <a href="/manager/inventory" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
@@ -138,6 +138,11 @@
             </div>
         </div>
     </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 mt-10 p-6 text-center">
+        <p class="text-gray-400">&copy; 2025 MUTLULUK. All rights reserved.</p>
+    </footer>
 </body>
 <!-- Footer -->
 <footer class="bg-gray-800 py-6 mt-10">

@@ -25,17 +25,17 @@
 
         <!-- Display Schedules -->
         {% if shifts %}
-            <ul class="space-y-4">
-                {% for shift in shifts %}
-                    <li class="p-4 bg-gray-700 rounded-md shadow-lg shift-item" data-date="{{ shift.start_time|date:'Y-m-d' }}">
-                        <strong class="text-yellow-400">{{ shift.staff.username }}</strong> <br>
-                        <span class="text-gray-400">Time: {{ shift.start_time|time:"H:i" }} - {{ shift.end_time|time:"H:i" }}</span><br>
-                        <span class="text-gray-300">Role: {{ shift.role }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
+        <ul class="space-y-4">
+            {% for shift in shifts %}
+            <li class="p-4 bg-gray-700 rounded-md shadow-lg shift-item" data-date="{{ shift.start_time|date:'Y-m-d' }}">
+                <strong class="text-yellow-400">{{ shift.staff.username }}</strong> <br>
+                <span class="text-gray-400">Time: {{ shift.start_time|time:"H:i" }} - {{ shift.end_time|time:"H:i" }}</span><br>
+                <span class="text-gray-300">Role: {{ shift.role }}</span>
+            </li>
+            {% endfor %}
+        </ul>
         {% else %}
-            <p class="text-gray-400 text-center mt-4">No shifts scheduled.</p>
+        <p class="text-gray-400 text-center mt-4">No shifts scheduled.</p>
         {% endif %}
     </main>
 
@@ -45,7 +45,7 @@
             let selectedDate = document.getElementById("filterDate").value;
             let shiftItems = document.querySelectorAll(".shift-item");
 
-            shiftItems.forEach(function(shift) {
+            shiftItems.forEach(function (shift) {
                 let shiftDate = shift.getAttribute("data-date"); // Get stored date from element
                 if (selectedDate === shiftDate) {
                     shift.style.display = "block";  //  Show matching shifts
@@ -55,5 +55,10 @@
             });
         }
     </script>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 mt-10 p-6 text-center">
+        <p class="text-gray-400">&copy; 2025 MUTLULUK. All rights reserved.</p>
+    </footer>
 </body>
 </html>
