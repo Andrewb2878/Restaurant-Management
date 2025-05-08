@@ -25,7 +25,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('admin/', admin.site.urls),
     path('menu/', menu, name='menu'),
-    path('reservation/', reservation, name='reservation'),
+    path('reservation/', include('reservation.urls')),
     path('portal/', portal, name='portal'),
     path('staff-scheduling/', include('staff_scheduling.urls')),  # Link to staff scheduling app
     path('core/', include('core.urls')),  # Chef & Waiter Dashboards
