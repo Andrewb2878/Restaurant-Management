@@ -12,4 +12,3 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.surname} - {self.booking_date} {self.booking_time}"
-

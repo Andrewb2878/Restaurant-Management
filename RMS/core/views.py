@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from .models import MenuItem, UserProfile  # Import your model
+from .forms import PortalLoginForm
 import json
 from django.contrib.auth.decorators import login_required, user_passes_test
 from staff_scheduling.models import Schedule, Shift  # Importing the model from stuff scheduling app
@@ -48,33 +49,30 @@ def waiter_dashboard(request):
 
 def portal(request):
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
+        form = PortalLoginForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
 
             try:
-                # Retrieve user profile & role
                 user_profile = UserProfile.objects.get(user=user)
+                role = user_profile.role
 
-                # Redirect based on role
-                if user_profile.role == "Chef":
+                if role == "Chef":
                     return redirect("chef_dashboard")
-                elif user_profile.role == "Waiter":
+                elif role == "Waiter":
                     return redirect("waiter_dashboard")
-                elif user_profile.role == "Manager":
+                elif role == "Manager":
                     return redirect("manager_dashboard")
                 else:
                     logout(request)
-                    messages.error(request, "Your account does not have an assigned role. Please contact your manager.")
-                    return redirect("portal")  # Default fallback
-
+                    messages.error(request, "Your account does not have an assigned role.")
+                    return redirect("portal")
             except UserProfile.DoesNotExist:
                 logout(request)
-                messages.error(request, "Your account does not have a user profile. Please contact your manager.")
+                messages.error(request, "Your account does not have a user profile.")
                 return redirect("portal")
-
     else:
-        form = AuthenticationForm()
+        form = PortalLoginForm()
 
     return render(request, 'core/portal.html', {"form": form})
