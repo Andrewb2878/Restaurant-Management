@@ -19,6 +19,9 @@ def menu(request):
     # Pass the data to the template
     return render(request, 'core/menu.html', {'menu_items': menu_items})
 
+def contact(request):
+    return render(request, 'core/contact.html')
+
 def is_chef(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == "Chef"
 

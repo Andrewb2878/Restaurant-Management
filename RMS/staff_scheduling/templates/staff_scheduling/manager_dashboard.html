@@ -10,11 +10,14 @@
     <!-- Navigation Bar -->
     <nav class="bg-gray-800 p-4">
         <div class="flex justify-between items-center">
-            <a href="/" class="text-yellow-600 text-xl font-bold"><i class="fas fa-utensils"></i> MUTLULUK</a>
+            <!-- Brand -->
+            <div class="text-yellow-600 text-xl font-bold tracking-wide">
+                MUTLULUK
+            </div>
             <div class="space-x-4">
+                <a href="{% url 'manager_dashboard' %}" class="hover:text-yellow-500">Dashboard</a>
                 <a href="/menu" class="hover:text-yellow-500">Menu</a>
                 <a href="{% url 'view_reservations' %}" class="hover:text-yellow-500">Reservations</a>
-                <a href="/manager/dashboard" class="hover:text-yellow-500">Dashboard</a>
                 <a href="/manager/reports" class="hover:text-yellow-500">Reports</a>
                 <div class="inline-flex items-center space-x-4">
                     <form action="{% url 'logout' %}" method="POST">
