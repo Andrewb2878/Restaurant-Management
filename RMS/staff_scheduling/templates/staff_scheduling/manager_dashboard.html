@@ -47,8 +47,8 @@
                 <p class="text-3xl font-bold text-white">$0</p>
             </div>
             <div class="bg-[rgb(157,130,0)] p-6 rounded-lg text-center shadow-lg border border-[rgb(157,130,0)]">
-                <h3 class="text-lg font-semibold text-gray-300">Pending Reservations</h3>
-                <p class="text-3xl font-bold text-gray-300">0</p>
+                <h3 class="text-lg font-semibold text-gray-300">Reservations</h3>
+                <p class="text-3xl font-bold text-gray-300">{{ reservation_count }}</p>
             </div>
             <div class="bg-[rgb(254,102,102)] p-6 rounded-lg text-center shadow-lg border border-[rgb(254,102,102)]">
                 <h3 class="text-lg font-semibold text-white">Low Stock Items</h3>
@@ -63,7 +63,7 @@
                 <a href="/manager/menu" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
                     Menu Management
                 </a>
-                <a href="/manager/reservations" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
+                <a href="{% url 'view_reservations' %}" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
                     Reservations
                 </a>
                 <a href="/manager/inventory" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
@@ -125,16 +125,27 @@
                             <th class="border-b pb-2">Date</th>
                             <th class="border-b pb-2">Time</th>
                             <th class="border-b pb-2">Guests</th>
-                            <th class="border-b pb-2">Status</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% if recent_reservations %}
+                        {% for r in recent_reservations %}
                         <tr>
-                            <td colspan="5" class="text-center text-gray-400 p-3">No recent reservations</td>
+                            <td class="py-2">{{ r.first_name }} {{ r.surname }}</td>
+                            <td class="py-2">{{ r.booking_date }}</td>
+                            <td class="py-2">{{ r.booking_time|time:"H:i" }}</td>
+                            <td class="py-2">{{ r.guest_count }}</td>
                         </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center text-gray-400 p-3">No recent reservations</td>
+                        </tr>
+                        {% endif %}
                     </tbody>
+
                 </table>
-                <a href="/manager/reservations" class="block text-center text-yellow-400 hover:text-yellow-500 mt-3">View All Reservations</a>
+                <a href="{% url 'view_reservations' %}" class="block text-center text-yellow-400 hover:text-yellow-500 mt-3">View All Reservations</a>
             </div>
         </div>
     </main>

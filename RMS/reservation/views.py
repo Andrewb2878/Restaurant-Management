@@ -36,11 +36,11 @@ def reservation(request):
                 booking_date=booking_date,
                 booking_time=booking_time,
             )
-            messages.success(request, f"Thank you {first_name}, your table has been booked for {booking_date} at {time}.")
+            messages.success(request, f"Thank you {first_name}, your table has been booked for {booking_date} at {booking_time}.")
             return redirect('reservation')
     return render(request, 'reservation/reservation.html')
 
 @login_required
 def view_reservations(request):
-    reservations = Reservation.objects.all().order_by('-booking_date', '-booking_time')
+    reservations = Reservation.objects.all().order_by('booking_date', 'booking_time')
     return render(request, 'reservation/view_reservations.html', {'reservations': reservations})
