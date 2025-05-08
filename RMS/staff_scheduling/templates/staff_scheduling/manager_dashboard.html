@@ -10,10 +10,10 @@
     <!-- Navigation Bar -->
     <nav class="bg-gray-800 p-4">
         <div class="flex justify-between items-center">
-            <a href="/" class="text-yellow-400 text-xl font-bold"><i class="fas fa-utensils"></i> MUTLULUK</a>
+            <a href="/" class="text-yellow-600 text-xl font-bold"><i class="fas fa-utensils"></i> MUTLULUK</a>
             <div class="space-x-4">
                 <a href="/menu" class="hover:text-yellow-500">Menu</a>
-                <a href="/reservation" class="hover:text-yellow-500">Reservations</a>
+                <a href="{% url 'view_reservations' %}" class="hover:text-yellow-500">Reservations</a>
                 <a href="/manager/dashboard" class="hover:text-yellow-500">Dashboard</a>
                 <a href="/manager/reports" class="hover:text-yellow-500">Reports</a>
                 <div class="inline-flex items-center space-x-4">
@@ -36,7 +36,7 @@
 
     <!-- Main Content -->
     <main class="p-8">
-        <!-- Stats Cards --> 
+        <!-- Stats Cards -->
         <div class="grid grid-cols-4 gap-6 mb-6">
             <div class="bg-[rgb(144,122,255)] p-6 rounded-lg text-center shadow-lg border border-[rgb(130,110,240)]">
                 <h3 class="text-lg font-semibold text-white">Total Orders</h3>
@@ -47,8 +47,8 @@
                 <p class="text-3xl font-bold text-white">$0</p>
             </div>
             <div class="bg-[rgb(157,130,0)] p-6 rounded-lg text-center shadow-lg border border-[rgb(157,130,0)]">
-                <h3 class="text-lg font-semibold text-gray-300">Pending Reservations</h3>
-                <p class="text-3xl font-bold text-gray-300">0</p>
+                <h3 class="text-lg font-semibold text-gray-300">Reservations</h3>
+                <p class="text-3xl font-bold text-gray-300">{{ reservation_count }}</p>
             </div>
             <div class="bg-[rgb(254,102,102)] p-6 rounded-lg text-center shadow-lg border border-[rgb(254,102,102)]">
                 <h3 class="text-lg font-semibold text-white">Low Stock Items</h3>
@@ -63,7 +63,7 @@
                 <a href="/manager/menu" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
                     Menu Management
                 </a>
-                <a href="/manager/reservations" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
+                <a href="{% url 'view_reservations' %}" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
                     Reservations
                 </a>
                 <a href="/manager/inventory" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
@@ -80,12 +80,12 @@
                     </button>
 
                     <!-- Dropdown Menu (Ensuring Full Width) -->
-                    <div x-show="open" class="absolute w-full bg-gray-800 border border-gray-700 rounded-md shadow-lg mt-2">
+                    <div x-show="open" class="absolute w-full bg-gray-800 border border-gray-700 rounded-md shadow-lg mt-12">
                         <a href="{% url 'create_schedule' %}" class="block px-4 py-2 text-white hover:bg-gray-700">Create Schedule</a>
                         <a href="{% url 'view_schedules' %}" class="block px-4 py-2 text-white hover:bg-gray-700">View Schedule</a>
                     </div>
                 </div>
-                
+
                 <!--  Alpine.js for Dropdown Functionality -->
                 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x/dist/cdn.min.js" defer></script>
                 <a href="/manager/inventory" class="bg-gray-700 border border-gray-500 text-white p-4 rounded-md text-center hover:bg-gray-600">
@@ -125,29 +125,41 @@
                             <th class="border-b pb-2">Date</th>
                             <th class="border-b pb-2">Time</th>
                             <th class="border-b pb-2">Guests</th>
-                            <th class="border-b pb-2">Status</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% if recent_reservations %}
+                        {% for r in recent_reservations %}
                         <tr>
-                            <td colspan="5" class="text-center text-gray-400 p-3">No recent reservations</td>
+                            <td class="py-2">{{ r.first_name }} {{ r.surname }}</td>
+                            <td class="py-2">{{ r.booking_date }}</td>
+                            <td class="py-2">{{ r.booking_time|time:"H:i" }}</td>
+                            <td class="py-2">{{ r.guest_count }}</td>
                         </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center text-gray-400 p-3">No recent reservations</td>
+                        </tr>
+                        {% endif %}
                     </tbody>
+
                 </table>
-                <a href="/manager/reservations" class="block text-center text-yellow-400 hover:text-yellow-500 mt-3">View All Reservations</a>
+                <a href="{% url 'view_reservations' %}" class="block text-center text-yellow-400 hover:text-yellow-500 mt-3">View All Reservations</a>
             </div>
         </div>
     </main>
-</body>
-<!-- Footer -->
-<footer class="bg-gray-800 py-6 mt-10">
-    <div class="container mx-auto text-center text-gray-400">
-        <p>&copy; 2023 MUTLULUK. All rights reserved.</p>
-        <div class="mt-4">
-            <a href="#" class="text-yellow-500 hover:text-yellow-600">Facebook</a> |
-            <a href="#" class="text-yellow-500 hover:text-yellow-600">Instagram</a> |
-            <a href="#" class="text-yellow-500 hover:text-yellow-600">Twitter</a>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-6 mt-10">
+        <div class="container mx-auto text-center text-gray-400">
+            <p>&copy; 2023 MUTLULUK. All rights reserved.</p>
+            <div class="mt-4">
+                <a href="#" class="text-yellow-500 hover:text-yellow-600">Facebook</a> |
+                <a href="#" class="text-yellow-500 hover:text-yellow-600">Instagram</a> |
+                <a href="#" class="text-yellow-500 hover:text-yellow-600">Twitter</a>
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
+</body>
 </html>
