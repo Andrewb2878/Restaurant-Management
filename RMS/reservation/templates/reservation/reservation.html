@@ -39,6 +39,20 @@
     <div class="container mx-auto mt-10 p-6 bg-gray-800 rounded-lg shadow-lg">
         <form method="POST" action="{% url 'reservation' %}">
             {% csrf_token %}
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == "success" %}
+                        <div class="mb-6 p-4 bg-green-500 text-white rounded-md shadow-md text-center">
+                            {{ message }}
+                        </div>
+                    {% elif message.tags == "error" %}
+                        <div class="mb-6 p-4 bg-red-500 text-white rounded-md shadow-md text-center">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             
                 <!-- Left Column -->
