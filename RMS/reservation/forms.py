@@ -20,7 +20,7 @@ class ReservationForm(forms.ModelForm):
         domain_without_extension = domain_part.split('.')[0]
         
         # Check if there is a period after the @ symbol and min domain length
-        if '@' in email and '.' not in email.split('@')[1] or len(domain_without_extension) < 3:
+        if '@' in email and '.' not in email.split('@')[1] or len(domain_without_extension) < 2:
             raise forms.ValidationError('The provided email address is invalid.')
         
         return email
