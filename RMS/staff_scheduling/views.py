@@ -1,8 +1,6 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import user_passes_test
-from .models import Shift
-from .models import Schedule
+from django.contrib.auth.decorators import login_required, user_passes_test
+from .models import Schedule, Shift
 from .forms import ScheduleForm
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
@@ -56,6 +54,3 @@ def view_schedules(request):
     schedules = Schedule.objects.all()  # Fetch all schedules
     shifts = Shift.objects.all() # Fetch all shifts
     return render(request, 'staff_scheduling/view_schedules.html', {'schedules': schedules, 'shifts': shifts})
-
-
-

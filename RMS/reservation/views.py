@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Reservation
 
@@ -39,3 +40,7 @@ def reservation(request):
             return redirect('reservation')
     return render(request, 'reservation/reservation.html')
 
+@login_required
+def view_reservations(request):
+    reservations = Reservation.objects.all().order_by('-booking_date', '-booking_time')
+    return render(request, 'reservation/view_reservations.html', {'reservations': reservations})

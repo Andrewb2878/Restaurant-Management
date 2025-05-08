@@ -2,13 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from .models import MenuItem  # Import your model
-from .models import UserProfile 
+from .models import MenuItem, UserProfile  # Import your model
 import json
 from django.contrib.auth.decorators import login_required, user_passes_test
-from staff_scheduling.models import Schedule  # Importing the model from stuff scheduling app
-from staff_scheduling.models import Shift
-
+from staff_scheduling.models import Schedule, Shift  # Importing the model from stuff scheduling app
 
 
 # Create your views here.
@@ -20,10 +17,6 @@ def menu(request):
     menu_items = MenuItem.objects.filter(available=True)  
     # Pass the data to the template
     return render(request, 'core/menu.html', {'menu_items': menu_items})
-
-def reservation(request):
-    return render(request, 'core/reservation.html')
-
 
 def is_chef(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == "Chef"
@@ -52,8 +45,6 @@ def waiter_dashboard(request):
             shifts_dict[shift_date] = [shift_info]
 
     return render(request, "core/waiter_dashboard.html", {"shifts_json": json.dumps(shifts_dict)})
-
-
 
 def portal(request):
     if request.method == 'POST':
