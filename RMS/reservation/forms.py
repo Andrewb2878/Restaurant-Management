@@ -1,5 +1,6 @@
 from django import forms
 from .models import Reservation
+from django.core.mail import send_mail
 
 class ReservationForm(forms.ModelForm):
     class Meta:
@@ -14,6 +15,16 @@ class ReservationForm(forms.ModelForm):
             'booking_time',
         ]
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        domain_without_extension = domain_part.split('.')[0]
+        
+        # Check if there is a period after the @ symbol and min domain length
+        if '@' in email and '.' not in email.split('@')[1] or len(domain_without_extension) < 3:
+            raise forms.ValidationError('The provided email address is invalid.')
+        
+        return email
+
     def clean(self):
         cleaned_data = super().clean()
         first_name = cleaned_data.get('first_name')
@@ -21,7 +32,7 @@ class ReservationForm(forms.ModelForm):
         email = cleaned_data.get('email')
         guest_count = cleaned_data.get('guest_count')
         booking_date = cleaned_data.get('booking_date')
-        booking_time = cleaned_data.get('booking_time')
+        booking_time = cleaned_data.get('booking_time').strftime('%H:%M')
 
         if Reservation.objects.filter(
             first_name=first_name,
@@ -36,3 +47,21 @@ class ReservationForm(forms.ModelForm):
             )
 
         return cleaned_data
+
+    # Sending confirmation email
+    def send_confirmation_email(self):
+        formatted_time = self.cleaned_data['booking_time'].strftime('%H:%M')
+    
+        send_mail(
+            subject='Your Reservation Confirmation',
+            message=(
+                f"Dear {self.cleaned_data['first_name']},\n\n"
+                f"Thank you for your reservation at MUTLULUK.\n"
+                f"Here are your booking details:\n"
+                f"Date: {self.cleaned_data['booking_date']}\nTime: {self.cleaned_data['booking_time']}\nGuests: {self.cleaned_data['guest_count']}\n\n"
+                f"We look forward to seeing you!\n\nMUTLULUK Team"
+            ),
+            from_email=None,  # uses DEFAULT_FROM_EMAIL
+            recipient_list=[self.cleaned_data['email']],
+            fail_silently=False,
+        )

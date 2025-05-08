@@ -11,9 +11,14 @@ def reservation(request):
         if form.is_valid():
             form.save()
             cd = form.cleaned_data
-            messages.success(request, f"Thank you {cd['first_name']}, your table has been booked for {cd['booking_date']} at {cd['booking_time']}.")
+            messages.success(request, f"Thank you {cd['first_name']}, your table has been booked for {cd['booking_date']} at {cd['booking_time']}. You will recive a confirmation email shortly.")
+            form.send_confirmation_email()
+            
             return redirect('reservation')
         else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
             for error in form.non_field_errors():
                 messages.error(request, error)
     else:
