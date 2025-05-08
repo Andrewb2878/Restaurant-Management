@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,60 +7,63 @@
   <title>Menu</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-white font-sans">
-    <!-- Navbar -->
-    <header class="bg-gray-800 shadow-lg">
-        <nav class="container mx-auto flex justify-between items-center p-6">
-            <!-- Brand -->
-            <div class="text-yellow-600 text-2xl font-bold tracking-wide">
-                MUTLULUK
-            </div>
-            <!-- Navigation Links -->
-            <ul class="flex gap-8 text-yellow-400 text-lg">
-                <li><a href="{% url 'index' %}" class="hover:text-yellow-600">Home</a></li>
-                <li><a href="{% url 'menu' %}" class="hover:text-yellow-600">Menu</a></li>
-                <li><a href="{% url 'reservation' %}" class="hover:text-yellow-600">Reservation</a></li>
-                <li><a href="#contact" class="hover:text-yellow-600">Contact Us</a></li>
-                <li><a href="{% url 'portal' %}" class="hover:text-yellow-600">Employee Portal</a></li>
-            </ul>
-        </nav>
-    </header>
-    <!-- Hero Section -->
-    <div class="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 py-16 text-center">
-        <h1 class="text-5xl font-extrabold text-yellow-500 tracking-tight mb-4">
-            Menu
-        </h1>
-        <p class="text-lg text-gray-300">
-            Indulge in the finest Turkish & Mediterranean cuisine in Derby.
-        </p>
-    </div>
-    <!-- Menu Section -->
-    <div class="container mx-auto py-16">
-        <h2 class="text-3xl text-center font-bold text-white mb-8">Lunch Menu</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for item in menu_items %}
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                <h3 class="text-xl font-bold text-yellow-500">{{ item.name }}</h3>
-                <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-auto mt-4">
-                <p class="text-gray-300 mt-2">{{ item.description }}</p>
-                <p class="text-yellow-400 mt-4">${{ item.price }}</p>
-            </div>
-            {% empty %}
-            <p class="text-gray-300">No menu items available at the moment.</p>
-            {% endfor %}
-        </div>
-    </div>
+<body class="bg-black text-white font-sans">
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 py-6 mt-10">
-        <div class="container mx-auto text-center text-gray-400">
-            <p>&copy; 2023 MUTLULUK. All rights reserved.</p>
-            <div class="mt-4">
-                <a href="#" class="text-yellow-500 hover:text-yellow-600">Facebook</a> |
-                <a href="#" class="text-yellow-500 hover:text-yellow-600">Instagram</a> |
-                <a href="#" class="text-yellow-500 hover:text-yellow-600">Twitter</a>
-            </div>
+  <!-- Navbar -->
+  <header class="bg-gray-900 shadow-lg">
+    <nav class="container mx-auto flex justify-between items-center p-6">
+      <div class="text-yellow-600 text-2xl font-bold tracking-wide">MUTLULUK</div>
+      <ul class="flex gap-8 text-yellow-400 text-lg">
+        <li><a href="{% url 'index' %}" class="hover:text-yellow-600">Home</a></li>
+        <li><a href="{% url 'menu' %}" class="hover:text-yellow-600">Menu</a></li>
+        <li><a href="{% url 'reservation' %}" class="hover:text-yellow-600">Reservation</a></li>
+        <li><a href="#contact" class="hover:text-yellow-600">Contact Us</a></li>
+        <li><a href="{% url 'portal' %}" class="hover:text-yellow-600">Employee Portal</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <div class="bg-gray-800 py-12 text-center">
+    <h1 class="text-5xl font-extrabold text-yellow-500">Menu</h1>
+    <p class="text-lg text-gray-300 mt-2">Enjoy our Turkish & Mediterranean specialties.</p>
+  </div>
+
+  <!-- Symbols Legend -->
+  <div class="max-w-4xl mx-auto bg-gray-800 p-4 rounded-lg mt-10 text-sm text-gray-300">
+    <h2 class="text-white font-semibold mb-2">Menu Symbols:</h2>
+    <ul class="list-disc list-inside">
+      <li><span class="italic">(V)</span> Vegetarian</li>
+      <li><span class="italic">(VE)</span> Vegan</li>
+      <li><span class="italic">(N)</span> Contains Nuts</li>
+      <li><span class="italic">(GF)</span> Gluten Free</li>
+      <li><span class="italic">(DF)</span> Dairy Free</li>
+    </ul>
+  </div>
+
+  <!-- Section Template -->
+  {% comment %} Copy this block per section {% endcomment %}
+  {% for section, items in menu_data.items %}
+    <div class="max-w-6xl mx-auto mt-12">
+      <h2 class="text-3xl font-bold text-yellow-500 mb-6">{{ section }}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {% for item in items %}
+        <div class="flex gap-4 items-start">
+          <img src="{% static 'menu_images/'|add:item.image %}" alt="{{ item.name }}" class="w-24 h-24 rounded shadow">
+          <div>
+            <h3 class="text-lg font-bold text-yellow-400">{{ item.name }}</h3>
+            <p class="text-gray-300 text-sm">{{ item.description }}</p>
+          </div>
         </div>
-    </footer>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 py-6 mt-16 text-center text-gray-400">
+    <p>&copy; 2025 MUTLULUK. All rights reserved.</p>
+  </footer>
+
 </body>
 </html>
