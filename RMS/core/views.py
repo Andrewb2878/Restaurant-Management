@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from .models import MenuItem, UserProfile  # Import your model
-from .forms import PortalLoginForm
+from .forms import PortalLoginForm, FeedbackForm
 import json
 from django.contrib.auth.decorators import login_required, user_passes_test
 from staff_scheduling.models import Schedule, Shift  # Importing the model from stuff scheduling app
@@ -13,25 +13,52 @@ from staff_scheduling.models import Schedule, Shift  # Importing the model from 
 def index(request):
     return render(request, 'core/index.html')
 
+
 def menu(request):
     # Fetch available menu items from the database
     menu_items = MenuItem.objects.filter(available=True)  
     # Pass the data to the template
     return render(request, 'core/menu.html', {'menu_items': menu_items})
 
-def contact(request):
-    return render(request, 'core/contact.html')
+
+def feedback(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Thank you! Your message has been sent.")
+            return redirect('feedback')
+        else:
+            messages.error(request, "There was a problem with your submission.")
+    else:
+        form = FeedbackForm()
+
+    return render(request, 'core/feedback.html', {'form': form})
+
+
+def is_manager(user):
+    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == "Manager"
+
+
+@login_required
+@user_passes_test(is_manager)
+def view_feedback(request):
+    return render(request, 'core/view_feedback.html')
+
 
 def is_chef(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == "Chef"
+
 
 @login_required
 @user_passes_test(is_chef)
 def chef_dashboard(request):
     return render(request, "core/chef_dashboard.html")
 
+
 def is_waiter(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == "Waiter"
+
 
 @login_required
 @user_passes_test(is_waiter)
@@ -49,6 +76,7 @@ def waiter_dashboard(request):
             shifts_dict[shift_date] = [shift_info]
 
     return render(request, "core/waiter_dashboard.html", {"shifts_json": json.dumps(shifts_dict)})
+
 
 def portal(request):
     if request.method == 'POST':

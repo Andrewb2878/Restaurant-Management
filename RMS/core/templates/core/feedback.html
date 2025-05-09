@@ -19,7 +19,7 @@
                 <li><a href="{% url 'index' %}" class="hover:text-yellow-600">Home</a></li>
                 <li><a href="{% url 'menu' %}" class="hover:text-yellow-600">Menu</a></li>
                 <li><a href="{% url 'reservation' %}" class="hover:text-yellow-600">Reservation</a></li>
-                <li><a href="{% url 'contact' %}" class="hover:text-yellow-600">Contact Us</a></li>
+                <li><a href="{% url 'feedback' %}" class="hover:text-yellow-600">Contact Us</a></li>
                 <li><a href="{% url 'portal' %}" class="hover:text-yellow-600">Employee Portal</a></li>
             </ul>
         </nav>
@@ -37,7 +37,7 @@
 
     <!-- Contact Form Section -->
     <div class="container mx-auto mt-10 p-6 bg-gray-800 rounded-lg shadow-lg">
-        <form method="POST" action="{% url 'contact' %}">
+        <form method="POST" action="{% url 'feedback' %}">
             {% csrf_token %}
             {% if messages %}
             {% for message in messages %}
@@ -68,7 +68,7 @@
             <!-- Unified Subject + Message Field -->
             <div class="relative mb-6">
                 <div class="bg-white rounded-md overflow-hidden">
-                    <input type="text" id="subject" name="subject" placeholder="Subject" class="w-full px-4 py-3 text-black border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <input type="text" id="subject" name="subject" placeholder="Subject" required class="w-full px-4 py-3 text-black border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     <textarea id="message" name="message" rows="6" maxlength="1000" placeholder="Your message..."
                               class="w-full px-4 py-3 text-black focus:outline-none resize-none" oninput="updateCharCount()"></textarea>
                     <div id="char-count" class="absolute bottom-2 right-4 text-xs text-gray-500">

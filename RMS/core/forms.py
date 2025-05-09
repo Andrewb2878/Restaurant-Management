@@ -1,6 +1,13 @@
 # core/forms.py
 from django import forms
+from .models import Feedback
 from django.contrib.auth.forms import AuthenticationForm
+
+
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ['name', 'email', 'subject', 'message']
 
 class PortalLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):

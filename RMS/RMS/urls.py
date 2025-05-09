@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from core.views import index, menu, contact, portal
+from core.views import index, menu, feedback, portal
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -26,10 +26,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('menu/', menu, name='menu'),
     path('reservation/', include('reservation.urls')),
-    path('conatct/', contact, name='contact'),
+    path('feedback/', feedback, name='feedback'),
     path('portal/', portal, name='portal'),
     path('staff-scheduling/', include('staff_scheduling.urls')),  # Link to staff scheduling app
-    path('core/', include('core.urls')),  # Chef & Waiter Dashboards
+    path('core/', include('core.urls')),  # Staff URL links (dashboards and view feedback form)
 
 ]
 
