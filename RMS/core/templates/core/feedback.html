@@ -40,17 +40,17 @@
         <form method="POST" action="{% url 'feedback' %}">
             {% csrf_token %}
             {% if messages %}
-            {% for message in messages %}
-            {% if message.tags == "success" %}
-            <div class="mb-6 p-4 bg-green-500 text-white rounded-md shadow-md text-center">
-                {{ message }}
-            </div>
-            {% elif message.tags == "error" %}
-            <div class="mb-6 p-4 bg-red-500 text-white rounded-md shadow-md text-center">
-                {{ message }}
-            </div>
-            {% endif %}
-            {% endfor %}
+                {% for message in messages %}
+                    {% if message.tags == "success" %}
+                    <div class="mb-6 p-4 bg-green-500 text-white rounded-md shadow-md text-center">
+                        {{ message }}
+                    </div>
+                    {% elif message.tags == "error" %}
+                    <div class="mb-6 p-4 bg-red-500 text-white rounded-md shadow-md text-center">
+                        {{ message }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
             {% endif %}
 
             <!-- Name & Email Row -->
