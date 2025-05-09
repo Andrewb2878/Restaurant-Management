@@ -17,13 +17,24 @@ class ReservationForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        domain_without_extension = domain_part.split('.')[0]
+
+        # Check if there's a period after the @ symbol
+        if '@' in email:
+            domain_part = email.split('@')[1]
         
-        # Check if there is a period after the @ symbol and min domain length
-        if '@' in email and '.' not in email.split('@')[1] or len(domain_without_extension) < 2:
+            # Ensure there's a period (.) in the domain part
+            if '.' not in domain_part:
+                raise forms.ValidationError('The provided email address is invalid.')
+        
+            # Check that the domain part is long enough (minimum 2 characters)
+            domain_without_extension = domain_part.split('.')[0]
+            if len(domain_without_extension) < 2:
+                raise forms.ValidationError('The provided email address is invalid.')
+        else:
             raise forms.ValidationError('The provided email address is invalid.')
-        
+
         return email
+
 
     def clean(self):
         cleaned_data = super().clean()
