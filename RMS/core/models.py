@@ -25,6 +25,7 @@ class Feedback(models.Model):
     subject = models.CharField(max_length=200)
     message = models.TextField(max_length=1000)
     submitted_at = models.DateTimeField(auto_now_add=True)
+    read = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Feedback"
