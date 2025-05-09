@@ -33,9 +33,8 @@
                 <div class="absolute top-4 right-4 flex flex-col items-end gap-2">
                     <!-- Toggle read -->
                     <button title="Mark as read" onclick="markAsRead({{ fb.id }})" class="toggle-read-btn inline-flex items-center justify-center text-grey-400 hover:text-green-400 h-8 w-8" data-read="{{ fb.read|yesno:'true,false' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2l4 -4M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z" />
-                        </svg>
+                        <!-- Icon container -->
+                        <div class="icon-container"></div>
                     </button>
                     <!-- Delete -->
                     <button title="Delete feedback" onclick="deleteFeedback({{ fb.id }})" class="inline-flex items-center justify-center text-grey-400 hover:text-red-400 h-8 w-8">
