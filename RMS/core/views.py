@@ -30,7 +30,10 @@ def feedback(request):
             messages.success(request, "Thank you! Your message has been sent.")
             return redirect('feedback')
         else:
-            messages.error(request, "There was a problem with your submission.")
+            # Loop through form errors and display each one
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
     else:
         form = FeedbackForm()
 
