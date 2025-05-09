@@ -1,4 +1,82 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Feedback</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg p-6 text-center">
+        <h1 class="text-yellow-500 text-3xl font-bold"> View Feedback</h1>
+    </header>
 
+    <!-- Main Content -->
+    <main class="p-8">
+    <!-- Filter Unread Only -->
+    <div class="mb-6 flex items-center justify-between">
+    <button id="filterToggle" onclick="toggleUnreadFilter()" class="px-4 py-2 bg-yellow-500 text-gray-900 font-semibold rounded-md hover:bg-yellow-600 transition" data-filtered="false">
+        Show Unread Only
+    </button>
+    </div>
+
+    <!-- Feedback List -->
+    {% if feedback %}
+    <ul id="feedbackList" class="space-y-6">
+        {% for fb in feedback %}
+        <li class="relative p-6 rounded-lg shadow-md transition-all feedback-card bg-gray-800 {% if fb.read %} opacity-50 bg-opacity-50 {% endif %}" 
+            data-read="{{ fb.read|yesno:'true,false' }}" id="feedback-{{ fb.id }}">
+            <!-- Top Right Icons -->
+            <div class="absolute top-4 right-4 flex flex-col items-end gap-2" data-read="{{ fb.read|yesno:'true,false' }}">
+                <div class="absolute top-4 right-4 flex flex-col items-end gap-2">
+                    <!-- Toggle read -->
+                    <button title="Mark as read" onclick="markAsRead({{ fb.id }})" class="toggle-read-btn inline-flex items-center justify-center text-grey-400 hover:text-green-400 h-8 w-8" data-read="{{ fb.read|yesno:'true,false' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2l4 -4M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z" />
+                        </svg>
+                    </button>
+                    <!-- Delete -->
+                    <button title="Delete feedback" onclick="deleteFeedback({{ fb.id }})" class="inline-flex items-center justify-center text-grey-400 hover:text-red-400 h-8 w-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m2 0a2 2 0 00-2-2H9a2 2 0 00-2 2h10z" />
+                        </svg>
+                    </button>
+
+                    </div>
+                </div>
+
+            <!-- Feedback Content -->
+            <div class="text-left">
+                <h2 class="text-xl font-bold text-yellow-400">{{ fb.name }}</h2>
+                <p class="text-sm text-gray-400">Email: {{ fb.email }}</p>
+                <p class="text-md text-grey-300 mt-2">Subject: {{ fb.subject }}</p>
+            </div>
+            <div class="mt-3 border-t border-gray-600 pt-3 text-gray-300">
+                {{ fb.message }}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-gray-400 text-center mt-4">No feedback to view.</p>
+    {% endif %}
+</main>
+
+<!--Linking to JavaScript-->
+<script src="{% static 'scripts/view_feedback.js' %}"></script>
+
+<!-- Footer -->
+<footer class="bg-gray-800 py-6 mt-10">
+    <div class="container mx-auto text-center text-gray-400">
+        <p>&copy; 2023 MUTLULUK. All rights reserved.</p>
+        <div class="mt-4">
+            <a href="#" class="text-yellow-500 hover:text-yellow-600">Facebook</a> |
+            <a href="#" class="text-yellow-500 hover:text-yellow-600">Instagram</a> |
+            <a href="#" class="text-yellow-500 hover:text-yellow-600">Twitter</a>
+        </div>
+    </div>
+</footer>
+</body>
 </html>

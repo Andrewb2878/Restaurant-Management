@@ -1,11 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from .models import MenuItem, UserProfile  # Import your model
-from .forms import PortalLoginForm, FeedbackForm
-import json
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import JsonResponse
+import json
+from .models import MenuItem, UserProfile, Feedback  # Import your model
+from .forms import PortalLoginForm, FeedbackForm
 from staff_scheduling.models import Schedule, Shift  # Importing the model from stuff scheduling app
 
 
@@ -43,7 +44,28 @@ def is_manager(user):
 @login_required
 @user_passes_test(is_manager)
 def view_feedback(request):
-    return render(request, 'core/view_feedback.html')
+    feedback = Feedback.objects.all().order_by('-submitted_at')
+    return render(request, 'core/view_feedback.html', {'feedback': feedback})
+
+
+@login_required
+@user_passes_test(is_manager)
+def toggle_feedback_read(request, feedback_id):
+    try:
+        feedback = Feedback.objects.get(id=feedback_id)
+        feedback.read = not feedback.read  # Toggle the read status
+        feedback.save()
+        return JsonResponse({'success': True, 'read': feedback.read})
+    except Feedback.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Feedback not found'})
+
+
+@login_required
+@user_passes_test(is_manager)
+def delete_feedback(request, pk):
+    feedback = get_object_or_404(Feedback, pk=pk)
+    feedback.delete()
+    return JsonResponse({'success': True})
 
 
 def is_chef(user):
