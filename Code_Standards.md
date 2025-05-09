@@ -1,7 +1,7 @@
 ﻿# Code Standards
 
 ### Project Structure:
-
+<pre>
 Restaurant-Management/
 │
 ├── manage.py
@@ -27,7 +27,7 @@ Restaurant-Management/
 │   ├── models.py
 │   ├── views.py
 │   └── ...
-
+</pre>
 ---
 ### App Purpose Guidelines:
 
