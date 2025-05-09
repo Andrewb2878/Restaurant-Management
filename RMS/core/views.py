@@ -2,18 +2,17 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from .models import MenuItem  # Import your model
-from .models import UserProfile 
+from .models import MenuItem, UserProfile  # Import your model
+from .forms import PortalLoginForm, FeedbackForm
 import json
 from django.contrib.auth.decorators import login_required, user_passes_test
-from staff_scheduling.models import Schedule  # Importing the model from stuff scheduling app
-from staff_scheduling.models import Shift
-
+from staff_scheduling.models import Schedule, Shift  # Importing the model from stuff scheduling app
 
 
 # Create your views here.
 def index(request):
     return render(request, 'core/index.html')
+
 
 def menu(request):
     # Fetch available menu items from the database
@@ -22,17 +21,44 @@ def menu(request):
     return render(request, 'core/menu.html', {'menu_items': menu_items})
 
 
+def feedback(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Thank you! Your message has been sent.")
+            return redirect('feedback')
+        else:
+            messages.error(request, "There was a problem with your submission.")
+    else:
+        form = FeedbackForm()
+
+    return render(request, 'core/feedback.html', {'form': form})
+
+
+def is_manager(user):
+    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == "Manager"
+
+
+@login_required
+@user_passes_test(is_manager)
+def view_feedback(request):
+    return render(request, 'core/view_feedback.html')
+
 
 def is_chef(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == "Chef"
+
 
 @login_required
 @user_passes_test(is_chef)
 def chef_dashboard(request):
     return render(request, "core/chef_dashboard.html")
 
+
 def is_waiter(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == "Waiter"
+
 
 @login_required
 @user_passes_test(is_waiter)
@@ -52,36 +78,32 @@ def waiter_dashboard(request):
     return render(request, "core/waiter_dashboard.html", {"shifts_json": json.dumps(shifts_dict)})
 
 
-
 def portal(request):
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
+        form = PortalLoginForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
 
             try:
-                # Retrieve user profile & role
                 user_profile = UserProfile.objects.get(user=user)
+                role = user_profile.role
 
-                # Redirect based on role
-                if user_profile.role == "Chef":
+                if role == "Chef":
                     return redirect("chef_dashboard")
-                elif user_profile.role == "Waiter":
+                elif role == "Waiter":
                     return redirect("waiter_dashboard")
-                elif user_profile.role == "Manager":
+                elif role == "Manager":
                     return redirect("manager_dashboard")
                 else:
                     logout(request)
-                    messages.error(request, "Your account does not have an assigned role. Please contact your manager.")
-                    return redirect("portal")  # Default fallback
-
+                    messages.error(request, "Your account does not have an assigned role.")
+                    return redirect("portal")
             except UserProfile.DoesNotExist:
                 logout(request)
-                messages.error(request, "Your account does not have a user profile. Please contact your manager.")
+                messages.error(request, "Your account does not have a user profile.")
                 return redirect("portal")
-
     else:
-        form = AuthenticationForm()
+        form = PortalLoginForm()
 
     return render(request, 'core/portal.html', {"form": form})

@@ -6,7 +6,7 @@
   <title>Menu</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-white font-sans">
+<body class="bg-white text-gray-900 font-sans">
     <!-- Navbar -->
     <header class="bg-gray-800 shadow-lg">
         <nav class="container mx-auto flex justify-between items-center p-6">
@@ -18,12 +18,13 @@
             <ul class="flex gap-8 text-yellow-400 text-lg">
                 <li><a href="{% url 'index' %}" class="hover:text-yellow-600">Home</a></li>
                 <li><a href="{% url 'menu' %}" class="hover:text-yellow-600">Menu</a></li>
-                <li><a href="#reservation" class="hover:text-yellow-600">Reservation</a></li>
-                <li><a href="#contact" class="hover:text-yellow-600">Contact Us</a></li>
+                <li><a href="{% url 'reservation' %}" class="hover:text-yellow-600">Reservation</a></li>
+                <li><a href="{% url 'feedback' %}" class="hover:text-yellow-600">Contact Us</a></li>
                 <li><a href="{% url 'portal' %}" class="hover:text-yellow-600">Employee Portal</a></li>
             </ul>
         </nav>
     </header>
+
     <!-- Hero Section -->
     <div class="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 py-16 text-center">
         <h1 class="text-5xl font-extrabold text-yellow-500 tracking-tight mb-4">
@@ -33,21 +34,85 @@
             Indulge in the finest Turkish & Mediterranean cuisine in Derby.
         </p>
     </div>
-    <!-- Menu Section -->
+
+    <!-- Menu Sections -->
     <div class="container mx-auto py-16">
-        <h2 class="text-3xl text-center font-bold text-white mb-8">Lunch Menu</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for item in menu_items %}
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                <h3 class="text-xl font-bold text-yellow-500">{{ item.name }}</h3>
-                <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-auto mt-4">
-                <p class="text-gray-300 mt-2">{{ item.description }}</p>
-                <p class="text-yellow-400 mt-4">${{ item.price }}</p>
-            </div>
-            {% empty %}
-            <p class="text-gray-300">No menu items available at the moment.</p>
-            {% endfor %}
+        <!-- Key Box for Symbols -->
+        <div class="bg-gray-100 p-4 rounded-md shadow mb-8 text-black">
+            <h3 class="text-lg font-bold mb-2">Symbols Key:</h3>
+            <p>
+                🌱 = Vegetarian &nbsp;&nbsp; 🌿 = Vegan &nbsp;&nbsp; 🚫🌾 = Gluten-Free &nbsp;&nbsp; 🥛🚫 = Dairy-Free &nbsp;&nbsp; 🌰 = Contains Nuts
+            </p>
         </div>
+
+        <!-- Starters -->
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-6">Starters</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-gray-100 p-6 rounded-lg shadow text-black">
+                <h3 class="text-xl font-bold">Hummus 🌱🌿🚫🌾🥛🚫</h3>
+                <img src="/media/menu_images/hummus.jpg" alt="Hummus" class="w-full h-auto mt-4">
+                <p class="mt-2">A classic favourite made with pureed chickpeas, tahini paste, lemon juice, olive oil and garlic.</p>
+            </div>
+            <div class="bg-gray-100 p-6 rounded-lg shadow text-black">
+                <h3 class="text-xl font-bold">Mixed Olives 🌱🌿🚫🌾🥛🚫</h3>
+                <img src="/media/menu_images/mixed_olives.jpg" alt="Mixed Olives" class="w-full h-auto mt-4">
+                <p class="mt-2">Fresh mixed olives drizzled with fresh lemon juice.</p>
+            </div>
+            <div class="bg-gray-100 p-6 rounded-lg shadow text-black">
+                <h3 class="text-xl font-bold">Halloumi 🌱🚫🌾🥛🚫</h3>
+                <img src="/media/menu_images/halloumi.jpg" alt="Halloumi" class="w-full h-auto mt-4">
+                <p class="mt-2">Grilled traditional Cypriot cheese sticks served with salad.</p>
+            </div>
+        </div>
+
+        <!-- Mains -->
+        <h2 class="text-3xl font-bold text-center text-gray-900 mt-16 mb-6">Mains</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-gray-100 p-6 rounded-lg shadow text-black">
+                <h3 class="text-xl font-bold">Chicken Wings</h3>
+                <img src="/media/menu_images/chicken_wings.jpg" alt="Chicken Wings" class="w-full h-auto mt-4">
+                <p class="mt-2">Marinated in a special sauce, cooked on the chargrill and served with rice and salad.</p>
+            </div>
+            <div class="bg-gray-100 p-6 rounded-lg shadow text-black">
+                <h3 class="text-xl font-bold">Lamb Chops</h3>
+                <img src="/media/menu_images/lamb_chops.jpg" alt="Lamb Chops" class="w-full h-auto mt-4">
+                <p class="mt-2">Tasty tender lamb chops cooked over a chargrill. Served with rice and salad.</p>
+            </div>
+            <div class="bg-gray-100 p-6 rounded-lg shadow text-black">
+                <h3 class="text-xl font-bold">Vegetable Sarma 🌱</h3>
+                <img src="/media/menu_images/vegetable_sarma.jpg" alt="Vegetable Sarma" class="w-full h-auto mt-4">
+                <p class="mt-2">A mix of aubergine, mushroom, peppers rolled in flatbread with mozzarella, yogurt & special sauce.</p>
+            </div>
+        </div>
+
+        <!-- Desserts -->
+        <h2 class="text-3xl font-bold text-center text-gray-900 mt-16 mb-6">Desserts</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-gray-100 p-6 rounded-lg shadow text-black">
+                <h3 class="text-xl font-bold">Baklava 🌱🌿🌰</h3>
+                <img src="/media/menu_images/baklava.jpg" alt="Baklava" class="w-full h-auto mt-4">
+                <p class="mt-2">A rich, sweet dessert pastry made of filo, filled with nuts and syrup.</p>
+            </div>
+            <div class="bg-gray-100 p-6 rounded-lg shadow text-black">
+                <h3 class="text-xl font-bold">Chocolate Fudge Cake 🌱 (🌰?)</h3>
+                <img src="/media/menu_images/chocolate_fudge_cake.jpg" alt="Chocolate Fudge Cake" class="w-full h-auto mt-4">
+                <p class="mt-2">The ultimate dessert – iconic, comforting and delicious. May contain nuts.</p>
+            </div>
+            <div class="bg-gray-100 p-6 rounded-lg shadow text-black">
+                <h3 class="text-xl font-bold">Apple Crumble 🌱🌿🚫🌾</h3>
+                <img src="/media/menu_images/apple_crumble.jpg" alt="Apple Crumble" class="w-full h-auto mt-4">
+                <p class="mt-2">Stewed apples topped with a gluten-free oatie crumble. Vegan & vegetarian.</p>
+            </div>
+        </div>
+
+        <!-- Drinks -->
+        <h2 class="text-3xl font-bold text-center text-gray-900 mt-16 mb-6">Drinks</h2>
+        <ul class="text-center text-lg">
+            <li>Water</li>
+            <li>Coke</li>
+            <li>Fanta</li>
+            <li>Orange Juice</li>
+        </ul>
     </div>
 
     <!-- Footer -->
@@ -63,3 +128,4 @@
     </footer>
 </body>
 </html>
+

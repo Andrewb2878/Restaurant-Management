@@ -1,17 +1,17 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import user_passes_test
-from .models import Shift
-from .models import Schedule
+from django.contrib.auth.decorators import login_required, user_passes_test
+from .models import Schedule, Shift
+from reservation.models import Reservation
 from .forms import ScheduleForm
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
+from datetime import date
+
 
 @login_required
 def staff_schedule(request): # View to display the schedule for the logged-in staff member.
     shifts = Schedule.objects.filter(staff=request.user)
     return render(request, 'staff_scheduling/staff_schedule.html', {'shifts': shifts})
-
 
 
 def is_manager(user):
@@ -20,15 +20,24 @@ def is_manager(user):
 @login_required
 @user_passes_test(is_manager)  # Restrict access to managers
 def manager_dashboard(request):  
+    today = date.today()
+
+    # Reservation data to display on dashboard
+    reservation_count = Reservation.objects.filter(booking_date__gte=today).count()
+    recent_reservations = Reservation.objects.order_by('-created_at')[:5]
+
     shifts = Schedule.objects.all()
-    return render(request, 'staff_scheduling/manager_dashboard.html', {'shifts': shifts})
+    return render(request, 'staff_scheduling/manager_dashboard.html', {
+        'shifts': shifts,
+        'reservation_count': reservation_count,
+        'recent_reservations': recent_reservations,
+    })
 
 @login_required
 @user_passes_test(is_manager)
 def manager_schedule(request):
     all_shifts = Shift.objects.all()  
     return render(request, 'staff_scheduling/manager_schedule.html', {'shifts': all_shifts})
-
 
 
 @login_required
@@ -56,6 +65,3 @@ def view_schedules(request):
     schedules = Schedule.objects.all()  # Fetch all schedules
     shifts = Shift.objects.all() # Fetch all shifts
     return render(request, 'staff_scheduling/view_schedules.html', {'schedules': schedules, 'shifts': shifts})
-
-
-

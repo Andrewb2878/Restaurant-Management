@@ -1,7 +1,7 @@
 # Restaurant-Management
 Repository for the restaurant management project work (software engineering).
  Instructions on how to run it on your PC:
- Of course! Here’s a step-by-step guide for someone to run your Django project on their PC after cloning it from the repository:
+
 
 ---
 
@@ -39,7 +39,7 @@ It's best to work in a virtual environment to avoid conflicts with global Python
 ---
 
 ### **3️⃣ Install Project Dependencies**
-Ensure they have Python and `pip` installed. Then, install the required Python packages by running:
+Ensure you have Python and `pip` installed. Then, install the required Python packages by running:
 ```bash
 pip install -r requirements.txt
 ```
@@ -61,17 +61,17 @@ If your project uses static files (e.g., CSS, JavaScript, images), collect them 
 ```bash
 python manage.py collectstatic
 ```
-> They can press `yes` (`y`) if prompted about overwriting files.
+> you can press `yes` (`y`) if prompted about overwriting files.
 
 ---
 
 ### **6️⃣ Start the Development Server**
-To run the project locally, they can start Django’s built-in development server:
+To run the project locally, you can start Django’s built-in development server:
 ```bash
 python manage.py runserver
 ```
 
-This will start the server at `http://127.0.0.1:8000/`. They can visit this URL in their browser to see the application in action.
+This will start the server at `http://127.0.0.1:8000/`. you can visit this URL in their browser to see the application in action.
 
 ---
 
@@ -88,7 +88,7 @@ If the project uses sensitive information (e.g., API keys, database credentials)
 ---
 
 ### **8️⃣ Optional: Load Sample Data**
-If the repository includes fixtures or sample data, they can load it into the database:
+If the repository includes fixtures or sample data, you can load it into the database:
 ```bash
 python manage.py loaddata <fixture_file.json>
 ```
