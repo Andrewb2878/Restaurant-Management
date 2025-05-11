@@ -42,7 +42,9 @@
                             <td class="px-4 py-2 text-center">{{ order.id }}</td>
                             <td class="px-4 py-2 text-center">{{ order.table_number }}</td>
                             <td class="px-4 py-2 text-center">
-                                <button class="bg-blue-500 px-4 py-2 rounded">View Items</button>
+                                <button onclick="viewOrderItems('{{ order.id }}')" class="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600">
+                                    View Items
+                                </button>
                             </td>
                             <td class="px-4 py-2 text-center">
                                 <span class="bg-yellow-500 px-4 py-2 rounded">{{ order.get_status_display }}</span>
@@ -124,27 +126,61 @@
 
                     <!-- Action Buttons -->
                     <div class="flex space-x-4">
-                        <button type="submit" name="add_item" value="true"
-                            class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600">
+                        <button type="submit" name="add_item" class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600">
                             Add Item
                         </button>
-                        <button type="submit" name="create_order" value="true"
-                            class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                        <button type="submit" name="create_order" class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
                             Create Order
                         </button>
                     </div>
                 </form>
-
-                <!-- Success Message Display -->
-                {% if messages %}
-                <div class="bg-green-500 text-white text-sm p-2 rounded mb-4">
-                    {% for message in messages %}
-                        <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-                {% endif %}
             </div>
         </div>
     </div>
+
+    <!-- Modal for displaying order items -->
+    <div id="orderItemsModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h3 class="text-xl font-semibold text-yellow-500 mb-4">Order Items</h3>
+            <div id="orderItemsContent" class="text-white"></div>
+            <button onclick="closeModal()" class="bg-red-500 px-4 py-2 rounded mt-4 w-full">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function viewOrderItems(orderId) {
+            let requestUrl = `/order-management/view-order-items/${orderId}/`;
+
+            fetch(requestUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Order items not found.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    let itemsContent = document.getElementById("orderItemsContent");
+                    let itemsHtml = "<ul class='space-y-2'>";
+                    data.items.forEach(item => {
+                        itemsHtml += `<li>${item.quantity} x ${item.menu_item} - $${item.price}</li>`;
+                    });
+                    itemsHtml += "</ul>";
+                    itemsContent.innerHTML = itemsHtml;
+
+                    // Show the modal
+                    let modal = document.getElementById("orderItemsModal");
+                    modal.classList.remove("hidden");
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Error fetching order items.");
+                });
+        }
+
+        function closeModal() {
+            let modal = document.getElementById("orderItemsModal");
+            modal.classList.add("hidden");
+        }
+    </script>
 </body>
 </html>

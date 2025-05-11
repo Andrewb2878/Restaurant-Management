@@ -6,12 +6,29 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse
 from decimal import Decimal
 from django.contrib import messages  
-from django.contrib.auth.models import User  
+from django.contrib.auth.models import User 
+from django.http import JsonResponse 
+from django.shortcuts import get_object_or_404
 
 # Check if the user is a waiter
 def is_waiter(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == "Waiter"
 
+
+
+@login_required
+@user_passes_test(is_waiter)
+def view_order_items(request, order_id):
+    """Fetch order items dynamically."""
+    order = get_object_or_404(Order, id=order_id)  # Ensures order exists
+    items = order.items.all()  # Fetch related order items using 'items' related_name
+
+    items_data = [
+        {"menu_item": item.menu_item.name, "quantity": item.quantity, "price": item.menu_item.price}
+        for item in items
+    ]
+
+    return JsonResponse({"order_id": order.id, "items": items_data})
 
 @login_required
 @user_passes_test(is_waiter)  # Restrict access to waiters
