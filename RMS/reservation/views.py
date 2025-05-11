@@ -3,9 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Reservation
 from .forms import ReservationForm
+from datetime import date, timedelta
 
 
 def reservation(request):
+    tomorrow = (date.today() + timedelta(days=1)).isoformat()
+
     if request.method == "POST":
         form = ReservationForm(request.POST)
         if form.is_valid():
@@ -24,7 +27,10 @@ def reservation(request):
     else:
         form = ReservationForm()
 
-    return render(request, 'reservation/reservation.html', {'form': form})
+    return render(request, 'reservation/reservation.html', {
+        'form': form,
+        'tomorrow': tomorrow
+    })
 
 @login_required
 def view_reservations(request):
