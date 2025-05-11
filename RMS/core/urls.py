@@ -9,6 +9,7 @@ urlpatterns = [
     path('feedback/toggle-read/<int:feedback_id>/', views.toggle_feedback_read, name='toggle_feedback_read'),
     path('feedback/delete/<int:pk>/', views.delete_feedback, name='delete_feedback'),
     
+ 
     
 ]
 

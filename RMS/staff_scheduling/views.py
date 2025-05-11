@@ -8,12 +8,41 @@ from django.contrib.auth.models import User
 from datetime import date
 
 
+import json  # json for serialization
+
 @login_required
-def staff_schedule(request): # View to display the schedule for the logged-in staff member.
-    shifts = Schedule.objects.filter(staff=request.user)
-    return render(request, 'staff_scheduling/staff_schedule.html', {'shifts': shifts})
+def staff_schedule(request):
+    # Fetch shifts for the logged-in staff member
+    shifts = Shift.objects.filter(staff=request.user)
 
+    # Prepare shifts data for the calendar
+    shifts_dict = {}
+    for shift in shifts:
+        shift_date = shift.start_time.strftime('%Y-%m-%d')
+        shift_info = f"{shift.start_time.strftime('%H:%M')} - {shift.end_time.strftime('%H:%M')} | Role: {shift.role}"
 
+        if shift_date in shifts_dict:
+            shifts_dict[shift_date].append(shift_info)
+        else:
+            shifts_dict[shift_date] = [shift_info]
+
+    # Serialize shifts_dict to JSON
+    shifts_json = json.dumps(shifts_dict)
+
+    # Determine the dashboard URL based on the user's role
+    if request.user.groups.filter(name="Manager").exists():
+        dashboard_url = "manager_dashboard"
+    elif request.user.groups.filter(name="Waiter").exists():
+        dashboard_url = "waiter_dashboard"
+    elif request.user.groups.filter(name="Chef").exists():
+        dashboard_url = "chef_dashboard"
+    else:
+        dashboard_url = "portal"  # Default fallback
+
+    return render(request, "staff_scheduling/staff_schedule.html", {
+        "shifts_json": shifts_json,  # Pass serialized JSON to the template
+        "dashboard_url": dashboard_url,
+    })
 def is_manager(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == "Manager"
 
@@ -43,7 +72,7 @@ def manager_schedule(request):
 @login_required
 @user_passes_test(is_manager)
 def create_schedule(request):
-    staffs = User.objects.filter(userprofile__role__in=["Chef", "Waiter"])  # Query only staff roles
+    staffs = User.objects.filter(userprofile__role__in=["Chef", "Waiter","Manager"])  # Query only staff roles
     form = ScheduleForm()  # Initialize the form outside the conditional to ensure availability
 
     if request.method == "POST":
