@@ -32,15 +32,15 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-blue-600 p-6 rounded-lg shadow-lg text-center">
                 <h5 class="text-xl font-semibold">Pending Orders</h5>
-                <h2 class="text-3xl font-bold mt-2">1</h2>
+                <h2 class="text-3xl font-bold mt-2">{{ pending_orders.count }}</h2>
             </div>
             <div class="bg-yellow-500 p-6 rounded-lg shadow-lg text-center text-black">
                 <h5 class="text-xl font-semibold">Preparing</h5>
-                <h2 class="text-3xl font-bold mt-2">0</h2>
+                <h2 class="text-3xl font-bold mt-2">{{ preparing_orders.count }}</h2>
             </div>
             <div class="bg-green-500 p-6 rounded-lg shadow-lg text-center">
                 <h5 class="text-xl font-semibold">Ready to Serve</h5>
-                <h2 class="text-3xl font-bold mt-2">0</h2>
+                <h2 class="text-3xl font-bold mt-2">{{ ready_orders.count }}</h2>
             </div>
         </div>
 
@@ -58,17 +58,23 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for order in pending_orders %}
                     <tr class="bg-gray-800">
-                        <td class="px-4 py-2 text-center">1</td>
-                        <td class="px-4 py-2 text-center">5</td>
+                        <td class="px-4 py-2 text-center">{{ order.id }}</td>
+                        <td class="px-4 py-2 text-center">{{ order.table_number }}</td>
                         <td class="px-4 py-2 text-center">
-                            <button class="bg-blue-500 px-4 py-2 rounded">View Items</button>
+                            <button onclick="viewOrderDetails('{{ order.id }}')" class="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600">View Items</button>
                         </td>
-                        <td class="px-4 py-2 text-center">20:54</td>
+                        <td class="px-4 py-2 text-center">{{ order.created_at|date:"H:i" }}</td>
                         <td class="px-4 py-2 text-center">
-                            <button class="bg-yellow-500 text-black px-4 py-2 rounded">Start Preparing</button>
+                            <button onclick="updateOrderStatus('{{ order.id }}', 'preparing')" class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600">Start Preparing</button>
                         </td>
                     </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-gray-400">No pending orders.</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -76,13 +82,63 @@
         <!-- Preparing Orders Section -->
         <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
             <h2 class="text-2xl font-semibold mb-4">Currently Preparing</h2>
-            <p class="text-gray-400 text-center">No orders are currently being prepared.</p>
+            <table class="w-full bg-gray-700 rounded-lg">
+                <thead class="bg-yellow-500 text-black">
+                    <tr>
+                        <th class="px-4 py-2">Order #</th>
+                        <th class="px-4 py-2">Table</th>
+                        <th class="px-4 py-2">Items</th>
+                        <th class="px-4 py-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in preparing_orders %}
+                    <tr class="bg-gray-800">
+                        <td class="px-4 py-2 text-center">{{ order.id }}</td>
+                        <td class="px-4 py-2 text-center">{{ order.table_number }}</td>
+                        <td class="px-4 py-2 text-center">
+                            <button onclick="viewOrderDetails('{{ order.id }}')" class="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600">View Items</button>
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            <button onclick="updateOrderStatus('{{ order.id }}', 'ready')" class="bg-green-500 px-4 py-2 rounded hover:bg-green-600">Mark Ready</button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-gray-400">No orders are currently being prepared.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
 
         <!-- Ready Orders Section -->
         <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
             <h2 class="text-2xl font-semibold mb-4">Ready for Service</h2>
-            <p class="text-gray-400 text-center">No orders are ready for service.</p>
+            <table class="w-full bg-gray-700 rounded-lg">
+                <thead class="bg-green-500 text-white">
+                    <tr>
+                        <th class="px-4 py-2">Order #</th>
+                        <th class="px-4 py-2">Table</th>
+                        <th class="px-4 py-2">Items</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in ready_orders %}
+                    <tr class="bg-gray-800">
+                        <td class="px-4 py-2 text-center">{{ order.id }}</td>
+                        <td class="px-4 py-2 text-center">{{ order.table_number }}</td>
+                        <td class="px-4 py-2 text-center">
+                            <button onclick="viewOrderDetails('{{ order.id }}')" class="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600">View Items</button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-gray-400">No orders are ready for service.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -90,14 +146,57 @@
     <div id="orderDetailsModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center">
         <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm">
             <h5 class="text-xl font-semibold text-yellow-500">Order Details</h5>
-            <div class="text-center mt-4">
-                <div class="spinner-border text-yellow-500"></div>
-            </div>
+            <div id="orderDetailsContent" class="text-white mt-4"></div>
             <button onclick="closeModal()" class="bg-red-500 px-4 py-2 rounded mt-4 w-full">Close</button>
         </div>
     </div>
 
     <script>
+        function viewOrderDetails(orderId) {
+            fetch(`/order-management/view-order-items/${orderId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const content = document.getElementById("orderDetailsContent");
+                    let html = "<ul>";
+                    data.items.forEach(item => {
+                        html += `<li>${item.quantity} x ${item.menu_item} - $${item.price}</li>`;
+                    });
+                    html += "</ul>";
+                    content.innerHTML = html;
+
+                    document.getElementById("orderDetailsModal").classList.remove("hidden");
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Failed to load order details.");
+                });
+        }
+
+            function updateOrderStatus(orderId, newStatus) {
+            const url = `{% url 'order_management:update_order_status' 0 %}`.replace('0', orderId); // Dynamically replace the order ID
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}",
+                },
+                body: JSON.stringify({ status: newStatus }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Order #${orderId} status updated to ${newStatus}`);
+                    location.reload();
+                } else {
+                    alert(`Error: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while updating the order status.");
+            });
+        }
+
         function closeModal() {
             document.getElementById("orderDetailsModal").classList.add("hidden");
         }
