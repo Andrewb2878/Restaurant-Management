@@ -8,7 +8,8 @@ import json
 from .models import MenuItem, UserProfile, Feedback  # Importing  model
 from .forms import PortalLoginForm, FeedbackForm
 from staff_scheduling.models import Schedule, Shift  # Importing the model from stuff scheduling app
-
+from django.shortcuts import render
+from order_management.models import Order
 
 # Create your views here.
 def index(request):
@@ -78,7 +79,16 @@ def is_chef(user):
 @login_required
 @user_passes_test(is_chef)
 def chef_dashboard(request):
-    return render(request, "core/chef_dashboard.html")
+    pending_orders = Order.objects.filter(status="pending")
+    preparing_orders = Order.objects.filter(status="preparing")
+    ready_orders = Order.objects.filter(status="ready")
+
+    context = {
+        "pending_orders": pending_orders,
+        "preparing_orders": preparing_orders,
+        "ready_orders": ready_orders,
+    }
+    return render(request, "core/chef_dashboard.html", context)
 
 
 def is_waiter(user):

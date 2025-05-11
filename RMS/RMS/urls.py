@@ -31,6 +31,8 @@ urlpatterns = [
     path('staff-scheduling/', include('staff_scheduling.urls')),  # Link to staff scheduling app
     path('core/', include('core.urls')),  # Staff URL links (dashboards and view feedback form)
     path('order-management/', include('order_management.urls')),  # Link to order management app
+    path('order-management/', include(('order_management.urls', 'order_management'), namespace='order_management')),  # Link to order management app
+
 
 ]
 
