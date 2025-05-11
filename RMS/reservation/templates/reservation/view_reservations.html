@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-    /* Custom date input styling to force white calendar icon */
-    input[type="date"]::-webkit-calendar-picker-indicator {
-      filter: invert(1);
-    }
+        /* Custom date input styling to force white calendar icon */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white font-sans">
@@ -59,31 +60,7 @@
     </main>
 
     <!-- JavaScript for Filtering -->
-    <script>
-        function filterReservations() {
-            let selectedDate = document.getElementById("filterDate").value;
-            let items = document.querySelectorAll(".reservation-item");
-
-            items.forEach(function (item) {
-                let itemDate = item.getAttribute("data-date");
-                item.style.display = (selectedDate === itemDate || selectedDate === "") ? "block" : "none";
-            });
-
-            // Also hide/show the headers
-            let headers = document.querySelectorAll("h2.text-yellow-400");
-            headers.forEach(function (header) {
-                let next = header.nextElementSibling;
-                let hasVisible = false;
-                if (next) {
-                    let children = next.querySelectorAll(".reservation-item");
-                    children.forEach(child => {
-                        if (child.style.display !== "none") hasVisible = true;
-                    });
-                }
-                header.style.display = hasVisible ? "block" : "none";
-            });
-        }
-    </script>
+    <script src="{% static 'scripts/date_filter.js' %}"></script>
 
     <!-- Footer -->
     <footer class="bg-gray-800 py-6 mt-10">
