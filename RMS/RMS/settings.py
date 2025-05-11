@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'core',
     'staff_scheduling',
     'reservation',
+    'order_management',
 
 ]
 

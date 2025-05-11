@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse
 import json
-from .models import MenuItem, UserProfile, Feedback  # Import your model
+from .models import MenuItem, UserProfile, Feedback  # Importing  model
 from .forms import PortalLoginForm, FeedbackForm
 from staff_scheduling.models import Schedule, Shift  # Importing the model from stuff scheduling app
 

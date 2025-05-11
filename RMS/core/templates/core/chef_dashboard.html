@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchen Order Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-gray-800 shadow-lg p-6 flex justify-between items-center fixed top-0 left-0 w-full z-50">
+        <h1 class="text-yellow-500 text-2xl font-bold">Kitchen Management</h1>
+        <div class="space-x-4">
+            <a href="#" class="hover:bg-yellow-500 hover:text-gray-900 bg-transparent border border-yellow-500 px-4 py-2 rounded-md transition duration-300">
+                My Schedule
+            </a>
+            <form method="POST" action="{% url 'logout' %}" class="inline">
+                {% csrf_token %}
+                <button type="submit" class="hover:bg-red-500 hover:text-white bg-transparent border border-red-500 px-4 py-2 rounded-md transition duration-300">
+                    Logout
+                </button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container mx-auto pt-24 p-8">
+        <h2 class="text-3xl font-bold mb-6 text-yellow-500 text-center">Kitchen Order Management</h2>
+
+        <!-- Order Status Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-blue-600 p-6 rounded-lg shadow-lg text-center">
+                <h5 class="text-xl font-semibold">Pending Orders</h5>
+                <h2 class="text-3xl font-bold mt-2">1</h2>
+            </div>
+            <div class="bg-yellow-500 p-6 rounded-lg shadow-lg text-center text-black">
+                <h5 class="text-xl font-semibold">Preparing</h5>
+                <h2 class="text-3xl font-bold mt-2">0</h2>
+            </div>
+            <div class="bg-green-500 p-6 rounded-lg shadow-lg text-center">
+                <h5 class="text-xl font-semibold">Ready to Serve</h5>
+                <h2 class="text-3xl font-bold mt-2">0</h2>
+            </div>
+        </div>
+
+        <!-- Pending Orders Section -->
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Pending Orders</h2>
+            <table class="w-full bg-gray-700 rounded-lg">
+                <thead class="bg-blue-600 text-white">
+                    <tr>
+                        <th class="px-4 py-2">Order #</th>
+                        <th class="px-4 py-2">Table</th>
+                        <th class="px-4 py-2">Items</th>
+                        <th class="px-4 py-2">Time</th>
+                        <th class="px-4 py-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bg-gray-800">
+                        <td class="px-4 py-2 text-center">1</td>
+                        <td class="px-4 py-2 text-center">5</td>
+                        <td class="px-4 py-2 text-center">
+                            <button class="bg-blue-500 px-4 py-2 rounded">View Items</button>
+                        </td>
+                        <td class="px-4 py-2 text-center">20:54</td>
+                        <td class="px-4 py-2 text-center">
+                            <button class="bg-yellow-500 text-black px-4 py-2 rounded">Start Preparing</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Preparing Orders Section -->
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Currently Preparing</h2>
+            <p class="text-gray-400 text-center">No orders are currently being prepared.</p>
+        </div>
+
+        <!-- Ready Orders Section -->
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold mb-4">Ready for Service</h2>
+            <p class="text-gray-400 text-center">No orders are ready for service.</p>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="orderDetailsModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm">
+            <h5 class="text-xl font-semibold text-yellow-500">Order Details</h5>
+            <div class="text-center mt-4">
+                <div class="spinner-border text-yellow-500"></div>
+            </div>
+            <button onclick="closeModal()" class="bg-red-500 px-4 py-2 rounded mt-4 w-full">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function closeModal() {
+            document.getElementById("orderDetailsModal").classList.add("hidden");
+        }
+    </script>
+</body>
+</html>

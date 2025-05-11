@@ -139,48 +139,65 @@
 </head>
 <body>
     <!-- Header -->
-    <header class="bg-gray-800 shadow-lg p-6 text-center">
+    <header class="bg-gray-800 shadow-lg p-6 text-align-left">
         <h1 class="text-yellow-500 text-3xl font-bold">Waiter Dashboard</h1>
     </header>
 
     <!-- Main Content -->
-        <main class="p-8">
-            <!-- Title -->
-            <div class="mb-6 text-center">
-                <h2 class="text-2xl font-semibold text-yellow-400">My Schedule</h2>
+    <main class="p-8">
+        <div class="flex gap-8">
+            <!-- Sidebar Navigation (Left Side) -->
+            <nav class="w-64 bg-gray-800 shadow-lg p-6 flex flex-col items-start">
+                
+    
+                <!-- Order Management Button -->
+                <a href="{% url 'order_management' %}" class="hover:bg-yellow-500 hover:text-gray-900 bg-transparent border border-yellow-500 px-4 py-2 rounded-md w-full text-center mb-4 transition duration-300">
+                    Order Management
+                </a>
+                <!--Menu button-->
+                <a href="{% url 'menu' %}" class="hover:bg-yellow-500 hover:text-gray-900 bg-transparent border border-yellow-500 px-4 py-2 rounded-md w-full text-center mb-4 transition duration-300">
+                    Menu 
+                </a>
+    
+                <!-- Logout Button -->
+                <form method="POST" action="{% url 'logout' %}" class="w-full">
+                    {% csrf_token %}
+                    <button type="submit" class="hover:bg-red-500 hover:text-white bg-transparent border border-red-500 px-4 py-2 rounded-md w-full text-center transition duration-300">
+                        Logout
+                    </button>
+                </form>
+            </nav>
+    
+            <!-- Schedule Section (Right Side) -->
+            <div class="flex-1">
+                <h2 class="text-2xl font-semibold text-yellow-400 mb-6 text-center">My Schedule</h2>
+    
+                <!-- Month Selector -->
+                <div class="flex justify-center">
+                    <select id="monthSelector" class="p-2 bg-gray-700 text-white rounded-md shadow-md">
+                        <option value="0">January</option>
+                        <option value="1">February</option>
+                        <option value="2">March</option>
+                        <option value="3">April</option>
+                        <option value="4">May</option>
+                        <option value="5" selected>June</option>
+                        <option value="6">July</option>
+                        <option value="7">August</option>
+                        <option value="8">September</option>
+                        <option value="9">October</option>
+                        <option value="10">November</option>
+                        <option value="11">December</option>
+                    </select>
+                </div>
+    
+                <!-- Calendar -->
+                <div class="calendar-container">
+                    <div id="calendar"></div>
+                </div>
             </div>
-
-            <!-- Centered Month Selector -->
-            <div class="flex justify-center">
-                <select id="monthSelector" class="p-2 bg-gray-700 text-white rounded-md shadow-md">
-                    <option value="0">January</option>
-                    <option value="1">February</option>
-                    <option value="2">March</option>
-                    <option value="3">April</option>
-                    <option value="4">May</option>
-                    <option value="5" selected>June</option>
-                    <option value="6">July</option>
-                    <option value="7">August</option>
-                    <option value="8">September</option>
-                    <option value="9">October</option>
-                    <option value="10">November</option>
-                    <option value="11">December</option>
-                </select>
-            </div>
-            
-            <form method="POST" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="hover:text-red-500 bg-transparent border border-red-500 px-4 py-2 rounded-md">
-                    Logout
-                </button>
-            </form>
-
-
-            <!-- Centered Calendar -->
-            <div class="calendar-container">
-                <div id="calendar"></div>
-            </div>
-        </main>
+        </div>
+    </main>
+      
 
     <!-- Modal for Shift Details -->
     <div id="modalOverlay" class="modal-overlay"></div>
@@ -188,8 +205,17 @@
         <div id="shiftContent"></div>
         <button id="closeModal" class="close-btn">Close</button>
     </div>
+     
 </body>
-<footer class="bg-gray-800 mt-10 p-6 text-center">
-        <p class="text-gray-400">&copy; 2025 MUTLULUK. All rights reserved.</p>
-    </footer>
+<!-- Footer -->
+<footer class="bg-gray-800 py-6 mt-10">
+    <div class="container mx-auto text-center text-gray-400">
+        <p>&copy; 2023 MUTLULUK. All rights reserved.</p>
+        <div class="mt-4">
+            <a href="#" class="text-yellow-500 hover:text-yellow-600">Facebook</a> |
+            <a href="#" class="text-yellow-500 hover:text-yellow-600">Instagram</a> |
+            <a href="#" class="text-yellow-500 hover:text-yellow-600">Twitter</a>
+        </div>
+    </div>
+</footer>
 </html>
