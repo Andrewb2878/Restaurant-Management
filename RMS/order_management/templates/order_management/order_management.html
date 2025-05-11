@@ -59,7 +59,23 @@
                             </td>
                             <td class="px-4 py-2 text-center">${{ order.total_amount }}</td>
                             <td class="px-4 py-2 text-center">
-                                <button class="bg-green-500 px-4 py-2 rounded">Mark Ready</button>
+                                {% if order.status == "served" %}
+                                <button 
+                                    data-order-id="{{ order.id }}" 
+                                    data-action="payment" 
+                                    onclick="updateOrderStatus('{{ order.id }}', 'payment')" 
+                                    class="bg-green-500 px-4 py-2 rounded hover:bg-green-600">
+                                    Take Payment
+                                </button>
+                                {% else %}
+                                <button 
+                                    data-order-id="{{ order.id }}" 
+                                    data-action="served" 
+                                    onclick="updateOrderStatus('{{ order.id }}', 'served')" 
+                                    class="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600">
+                                    Mark Served
+                                </button>
+                                {% endif %}
                             </td>
                         </tr>
                         {% empty %}
@@ -183,6 +199,42 @@
                     console.error("Error:", error);
                     alert("Error fetching order items.");
                 });
+        }
+        function updateOrderStatus(orderId, newStatus) {
+            const url = `/order-management/update-order-status/${orderId}/`; 
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}", // Ensures the CSRF token is included
+                },
+                body: JSON.stringify({ status: newStatus }), // Send the new status in the request body
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Order #${orderId} status updated to ${newStatus}`);
+
+                    // Dynamically update the button
+                    const button = document.querySelector(`button[data-order-id="${orderId}"][data-action="${newStatus}"]`);
+                    if (newStatus === "served") {
+                        button.textContent = "Take Payment";
+                        button.classList.remove("bg-blue-500", "hover:bg-blue-600");
+                        button.classList.add("bg-green-500", "hover:bg-green-600");
+                        button.setAttribute("onclick", `updateOrderStatus('${orderId}', 'payment')`);
+                        button.setAttribute("data-action", "payment");
+                    }
+
+                    // Reload the page to reflect the updated status (optional)
+                    // location.reload();
+                } else {
+                    alert(`Error: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while updating the order status.");
+            });
         }
 
         function closeModal() {

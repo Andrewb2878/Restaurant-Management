@@ -37,13 +37,12 @@ def view_order_items(request, order_id):
 def update_order_status(request, order_id):
     if request.method == "POST":
         try:
-            # Parse JSON body
             import json
             body = json.loads(request.body)
             new_status = body.get("status")
 
             # Validate the new status
-            if new_status not in ["pending", "preparing", "ready"]:
+            if new_status not in ["pending", "preparing", "ready", "served", "payment"]:
                 return JsonResponse({"success": False, "error": "Invalid status"}, status=400)
 
             # Update the order status
@@ -55,7 +54,6 @@ def update_order_status(request, order_id):
         except json.JSONDecodeError:
             return JsonResponse({"success": False, "error": "Invalid JSON body"}, status=400)
     return JsonResponse({"success": False, "error": "Invalid request method"}, status=405)
-
 @login_required
 @user_passes_test(is_waiter)  # Restrict access to waiters
 def order_management(request):
