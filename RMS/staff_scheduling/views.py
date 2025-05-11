@@ -23,7 +23,7 @@ def manager_dashboard(request):
     today = date.today()
 
     # Reservation data to display on dashboard
-    reservation_count = Reservation.objects.filter(booking_date__gte=today).count()
+    reservation_count = Reservation.objects.count()
     recent_reservations = Reservation.objects.order_by('-created_at')[:5]
 
     shifts = Schedule.objects.all()

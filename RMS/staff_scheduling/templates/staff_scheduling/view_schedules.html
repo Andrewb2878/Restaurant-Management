@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,21 +47,7 @@
     </main>
 
     <!-- JavaScript for Filtering -->
-    <script>
-        function filterSchedules() {
-            let selectedDate = document.getElementById("filterDate").value;
-            let shiftItems = document.querySelectorAll(".shift-item");
-
-            shiftItems.forEach(function (shift) {
-                let shiftDate = shift.getAttribute("data-date"); // Get stored date from element
-                if (selectedDate === shiftDate) {
-                    shift.style.display = "block";  //  Show matching shifts
-                } else {
-                    shift.style.display = "none";   //  Hide non-matching shifts
-                }
-            });
-        }
-    </script>
+    <script src="{% static 'scripts/date_filter.js' %}"></script>
 
     <!-- Footer -->
     <footer class="bg-gray-800 py-6 mt-10">
