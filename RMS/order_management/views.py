@@ -9,6 +9,13 @@ from django.contrib import messages
 from django.contrib.auth.models import User 
 from django.shortcuts import get_object_or_404
 
+
+@login_required
+def get_total_orders(request):
+    """Fetch the total number of completed orders."""
+    total_orders = Order.objects.filter(status="payment").count()
+    return JsonResponse({"total_orders": total_orders})
+
 # Check if the user is a waiter
 def is_waiter(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == "Waiter"
