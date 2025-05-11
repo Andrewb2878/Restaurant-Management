@@ -13,25 +13,28 @@
     </style>
 </head>
     <body class="bg-gray-900 text-white font-sans">
-        <!-- Navbar -->
-        <header class="bg-gray-800 shadow-lg">
-            <nav class="container mx-auto flex justify-between items-center p-6">
-                <div class="text-yellow-600 text-2xl font-bold tracking-wide">MUTLULUK</div>
-                <ul class="flex gap-8 text-yellow-400 text-lg">
-                    <li><a href="#home" class="hover:text-yellow-600">Home</a></li>
-                    <li><a href="{% url 'menu' %}" class="hover:text-yellow-600">Menu</a></li>
-                    <li><a href="#reservation" class="hover:text-yellow-600">Reservation</a></li>
-                    <li><a href="#contact" class="hover:text-yellow-600">Contact Us</a></li>
-                    <li><a href="#employee" class="hover:text-yellow-600">Employee Portal</a></li>
-                </ul>
-            </nav>
+        <!-- Header -->
+        <header class="bg-gray-800 shadow-lg p-6 text-center">
+            <h1 class="text-yellow-500 text-3xl font-bold">Create Schedule</h1>
         </header>
 
         <!-- Create Schedule Section -->
         <div class="container mx-auto mt-10 p-6 bg-gray-800 rounded-lg shadow-lg">
-            <h2 class="text-3xl font-bold text-yellow-500 mb-4">Create Schedule</h2>
             <form method="POST" action="{% url 'create_schedule' %}">
                 {% csrf_token %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == "success" %}
+                        <div class="mb-6 p-4 bg-green-500 text-white rounded-md shadow-md text-center">
+                            {{ message }}
+                        </div>
+                        {% elif message.tags == "error" %}
+                        <div class="mb-6 p-4 bg-red-500 text-white rounded-md shadow-md text-center">
+                            {{ message }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
 
                 <div class="mb-4">
                     <label for="name" class="block text-gray-300 mb-2">Schedule Name:</label>
@@ -40,7 +43,7 @@
 
                 <div class="mb-4">
                     <label for="start_date" class="block text-gray-300 mb-2">Start Date:</label>
-                    <input type="date" id="start_date" name="start_date" required class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
+                    <input type="date" id="start_date" name="start_date" required min="{{ tomorrow }}" class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
                 </div>
 
                 <div class="mb-4">

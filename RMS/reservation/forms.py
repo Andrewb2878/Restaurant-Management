@@ -1,6 +1,8 @@
 from django import forms
 from .models import Reservation
 from django.core.mail import send_mail
+from datetime import date
+
 
 class ReservationForm(forms.ModelForm):
     class Meta:
@@ -44,6 +46,9 @@ class ReservationForm(forms.ModelForm):
         guest_count = cleaned_data.get('guest_count')
         booking_date = cleaned_data.get('booking_date')
         booking_time = cleaned_data.get('booking_time').strftime('%H:%M')
+
+        if booking_date and booking_date <= date.today():
+            self.add_error('booking_date', "Please select a reservation date in the future.")
 
         if Reservation.objects.filter(
             first_name=first_name,
