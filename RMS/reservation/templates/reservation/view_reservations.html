@@ -38,17 +38,38 @@
         <h2 class="text-xl font-semibold text-yellow-400 mt-8 border-b border-yellow-500 pb-1">{{ group.grouper }}</h2>
         <ul>
             {% for reservation in group.list %}
-            <li class="mt-4 p-4 bg-gray-700 rounded-md shadow-lg reservation-item" data-date="{{ reservation.booking_date|date:'Y-m-d' }}">
-                <div class="flex justify-between">
-                    <strong class="text-yellow-400">{{ reservation.first_name }} {{ reservation.surname }}</strong>
-                    <span class="text-gray-300">{{ reservation.booking_time|time:"H:i" }}</span>
-                </div>
-                <div>
-                    <span class="text-gray-500">Email: {{ reservation.email }}</span><br>
-                    <span class="text-gray-300">Guests: {{ reservation.guest_count }}</span><br>
-                    {% if reservation.special_requirements %}
-                    <span class="text-gray-300 italic">Special Requirements: {{ reservation.special_requirements }}</span>
+            <li id="reservation-{{ reservation.id }}" class="relative mt-4 p-4 bg-gray-700 rounded-md shadow-lg reservation-item" data-date="{{ reservation.booking_date|date:'Y-m-d' }}">
+                <!-- Icon below the time, top-right corner -->
+                <div class="absolute top-4 right-4 flex flex-col items-end gap-1">
+                    <span class="text-gray-300 text-sm">{{ reservation.booking_time|time:"H:i" }}</span>
+                    {% if reservation.is_past %}
+                    <!-- Past reservation icon -->
+                    <button title="Delete reservation" onclick="handleReservationAction({{ reservation.id }}, 'delete')" class="mt-2 inline-flex items-center justify-center text-yellow-400 hover:text-red-500 h-8 w-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m2 0a2 2 0 00-2-2H9a2 2 0 00-2 2h10z" />
+                        </svg>
+                    </button>
+                    {% else %}
+                    <!-- Future reservation icon -->
+                    <button title="Cancel reservation" onclick="handleReservationAction({{ reservation.id }}, 'cancel')" class="mt-2 inline-flex items-center justify-center text-yellow-400 hover:text-red-500 h-8 w-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </button>
                     {% endif %}
+                </div>
+
+                <!-- Main content -->
+                <div class="pr-12">
+                    <!-- Add right padding so text doesn't go under the icon -->
+                    <strong class="text-yellow-400">{{ reservation.first_name }} {{ reservation.surname }}</strong>
+                    <div class="mt-1">
+                        <span class="text-gray-500">Email: {{ reservation.email }}</span><br>
+                        <span class="text-gray-300">Guests: {{ reservation.guest_count }}</span><br>
+                        {% if reservation.special_requirements %}
+                        <span class="text-gray-300 italic">Special Requirements: {{ reservation.special_requirements }}</span>
+                        {% endif %}
+                    </div>
                 </div>
             </li>
             {% endfor %}
@@ -59,8 +80,9 @@
         {% endif %}
     </main>
 
-    <!-- JavaScript for Filtering -->
+    <!-- JavaScript -->
     <script src="{% static 'scripts/date_filter.js' %}"></script>
+    <script src="{% static 'scripts/view_reservations.js '%}"></script>
 
     <!-- Footer -->
     <footer class="bg-gray-800 py-6 mt-10">

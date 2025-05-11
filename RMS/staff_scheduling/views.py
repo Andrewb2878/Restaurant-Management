@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
@@ -27,11 +28,17 @@ def manager_dashboard(request):
     recent_reservations = Reservation.objects.order_by('-created_at')[:5]
 
     shifts = Schedule.objects.all()
-    return render(request, 'staff_scheduling/manager_dashboard.html', {
+    response = render(request, 'staff_scheduling/manager_dashboard.html', {
         'shifts': shifts,
         'reservation_count': reservation_count,
         'recent_reservations': recent_reservations,
     })
+
+    response['Cache-Control'] = 'no-store, no-cache, must-revalidate, proxy-revalidate'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+
+    return response
 
 @login_required
 @user_passes_test(is_manager)
