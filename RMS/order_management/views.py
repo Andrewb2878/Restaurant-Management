@@ -8,7 +8,18 @@ from decimal import Decimal
 from django.contrib import messages  
 from django.contrib.auth.models import User 
 from django.shortcuts import get_object_or_404
+from django.db import models
+from django.db.models import Sum, F
 
+
+
+@login_required
+def get_total_revenue(request):
+    """Fetch the total revenue from completed orders."""
+    total_revenue = OrderItem.objects.filter(order__status="payment").aggregate(
+        total=Sum(F('menu_item__price') * F('quantity'))
+    )['total'] or 0
+    return JsonResponse({"total_revenue": float(total_revenue)})
 
 @login_required
 def get_total_orders(request):
