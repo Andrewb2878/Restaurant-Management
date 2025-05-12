@@ -7,6 +7,7 @@ from reservation.models import Reservation
 from .models import Schedule, Shift
 from .forms import ScheduleForm
 from datetime import date, timedelta
+from order_management.models import Order
 
 
 import json  # json for serialization
@@ -51,6 +52,7 @@ def is_manager(user):
 @user_passes_test(is_manager)  # Restrict access to managers
 def manager_dashboard(request):  
     today = date.today()
+    recent_orders = Order.objects.order_by('-created_at')[:5]
 
     # Reservation data to display on dashboard
     reservation_count = Reservation.objects.count()
@@ -61,6 +63,7 @@ def manager_dashboard(request):
         'shifts': shifts,
         'reservation_count': reservation_count,
         'recent_reservations': recent_reservations,
+        'recent_orders': recent_orders,
     })
 
     response['Cache-Control'] = 'no-store, no-cache, must-revalidate, proxy-revalidate'

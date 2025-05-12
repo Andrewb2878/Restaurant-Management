@@ -11,6 +11,8 @@ from django.shortcuts import get_object_or_404
 from django.db import models
 from django.db.models import Sum, F
 
+def is_waiter_or_manager(user):
+    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role in ["Waiter", "Manager"]
 
 
 @login_required
@@ -73,7 +75,7 @@ def update_order_status(request, order_id):
             return JsonResponse({"success": False, "error": "Invalid JSON body"}, status=400)
     return JsonResponse({"success": False, "error": "Invalid request method"}, status=405)
 @login_required
-@user_passes_test(is_waiter)  # Restrict access to waiters
+@user_passes_test(is_waiter_or_manager)  # Restrict access to waiters and managers
 def order_management(request):
     # Get the status filter from the query parameters
     status_filter = request.GET.get("status", "all")

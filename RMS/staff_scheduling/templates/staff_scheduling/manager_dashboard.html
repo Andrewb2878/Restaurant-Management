@@ -153,12 +153,23 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% if recent_orders %}
+                        {% for order in recent_orders %}
+                        <tr>
+                            <td class="py-2">{{ order.id }}</td>
+                            <td class="py-2">{{ order.table_number }}</td>
+                            <td class="py-2">{{ order.get_status_display }}</td>
+                            <td class="py-2">${{ order.total_amount }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
                         <tr>
                             <td colspan="4" class="text-center text-gray-400 p-3">No recent orders</td>
                         </tr>
+                        {% endif %}
                     </tbody>
                 </table>
-                <a href="/waiter/orders" class="block text-center text-yellow-400 hover:text-yellow-500 mt-3">View All Orders</a>
+                <a href="{% url 'order_management' %}" class="block text-center text-yellow-400 hover:text-yellow-500 mt-3">View All Orders</a>
             </div>
 
             <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
