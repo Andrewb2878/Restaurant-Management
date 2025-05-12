@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-black font-sans">
+    <!-- Navbar -->
+    <header class="shadow p-4 flex justify-between items-center">
+        <div class="text-[#B58B1D] text-2xl font-bold tracking-wide">MUTLULUK</div>
+        <nav class="space-x-6 text-[#B58B1D] font-semibold text-lg">
+            <a href="#" class="hover:underline">RESERVATIONS</a>
+            <a href="#" class="hover:underline">ORDERS</a>
+            <a href="#" class="hover:underline">INVENTORY</a>
+            <a href="#" class="hover:underline">MY SCHEDULE</a>
+        </nav>
+    </header>
+
+    <!-- Title -->
+    <div class="text-center my-10">
+        <h1 class="text-4xl font-bold text-[#B58B1D]">INVENTORY</h1>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-between items-center max-w-6xl mx-auto mb-4 px-4">
+        <div class="flex items-center space-x-2">
+            <input type="text" id="searchInput" placeholder="Search..." class="border border-gray-300 px-3 py-2 rounded">
+            <button onclick="filterTable()" class="bg-[#B58B1D] text-white font-semibold px-4 py-2 rounded">Filter</button>
+        </div>
+        <button onclick="addItem()" class="bg-[#B58B1D] text-white font-semibold px-4 py-2 rounded">Add item</button>
+    </div>
+
+    <!-- Inventory Table -->
+    <div class="max-w-6xl mx-auto px-4">
+        <table class="w-full table-auto border-collapse border border-black">
+            <thead class="bg-white text-[#B58B1D]">
+                <tr>
+                    <th class="border border-black px-4 py-2">Item ID</th>
+                    <th class="border border-black px-4 py-2">Item Name</th>
+                    <th class="border border-black px-4 py-2">Quantity</th>
+                    <th class="border border-black px-4 py-2">Reorder</th>
+                    <th class="border border-black px-4 py-2">Supplier information</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryTable" class="text-center">
+                <tr>
+                    <td class="border border-black px-4 py-2">101</td>
+                    <td class="border border-black px-4 py-2">Tomatoes</td>
+                    <td class="border border-black px-4 py-2">50</td>
+                    <td class="border border-black px-4 py-2">20</td>
+                    <td class="border border-black px-4 py-2">Fresh Farms Ltd.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Generate Report Button -->
+    <div class="text-center my-10">
+        <button onclick="generateReport()" class="bg-[#B58B1D] text-white font-semibold px-6 py-3 rounded">Generate report</button>
+    </div>
+
+    <script>
+        function filterTable() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.querySelectorAll("#inventoryTable tr");
+            rows.forEach(row => {
+                row.style.display = row.textContent.toLowerCase().includes(input) ? "" : "none";
+            });
+        }
+
+        function addItem() {
+            let table = document.getElementById("inventoryTable");
+            let row = table.insertRow();
+            let cells = ["", "", "", "", ""];
+            for (let i = 0; i < 5; i++) {
+                let cell = row.insertCell(i);
+                cell.innerHTML = prompt(`Enter ${['Item ID', 'Item Name', 'Quantity', 'Reorder', 'Supplier'][i]}:`);
+            }
+        }
+
+        function generateReport() {
+            let table = document.getElementById("inventoryTable");
+            let csv = [];
+            let headers = ["Item ID", "Item Name", "Quantity", "Reorder", "Supplier information"];
+            csv.push(headers.join(","));
+            for (let i = 0; i < table.rows.length; i++) {
+                let row = [];
+                for (let j = 0; j < table.rows[i].cells.length; j++) {
+                    row.push(table.rows[i].cells[j].innerText);
+                }
+                csv.push(row.join(","));
+            }
+            let csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+            let downloadLink = document.createElement("a");
+            downloadLink.download = "inventory_report.csv";
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+        }
+    </script>
+</body>
+</html>
