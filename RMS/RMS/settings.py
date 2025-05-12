@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'staff_scheduling',
     'reservation',
     'order_management',
+    'inventory',
 
 ]
 

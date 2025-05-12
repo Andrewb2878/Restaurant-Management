@@ -7,7 +7,7 @@ class OrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ['table_number', 'status']  # Removed waiter field
+        fields = ['table_number', 'status']  
 
     table_number = forms.IntegerField(
         widget=forms.NumberInput(attrs={

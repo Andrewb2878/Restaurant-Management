@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // JavaScript for filtering inventory items based on search input
+        function filterInventory() {
+            const searchInput = document.getElementById("searchInventory").value.toLowerCase();
+            const rows = document.querySelectorAll("#inventoryTable tbody tr");
+
+            rows.forEach(row => {
+                const itemName = row.querySelector("td:first-child").textContent.toLowerCase();
+                if (itemName.includes(searchInput)) {
+                    row.style.display = ""; // Show row
+                } else {
+                    row.style.display = "none"; // Hide row
+                }
+            });
+        }
+
+        // JavaScript for opening and closing modals
+        function openAddItemModal() {
+            document.getElementById("addItemModal").classList.remove("hidden");
+        }
+
+        function closeAddItemModal() {
+            document.getElementById("addItemModal").classList.add("hidden");
+        }
+
+        function openEditModal(itemId, itemName, quantity, minLevel, supplier) {
+            const modal = document.getElementById("editModal");
+            if (modal) {
+                // Populate modal fields
+                document.getElementById("editItemId").value = itemId;
+                document.getElementById("editItemName").textContent = `Update Inventory: ${itemName}`;
+                document.getElementById("editQuantity").value = quantity;
+                document.getElementById("editMinLevel").value = minLevel;
+                document.getElementById("editSupplier").value = supplier;
+
+                // Show modal
+                modal.classList.remove("hidden");
+            } else {
+                console.error("Edit Modal not found!");
+            }
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById("editModal");
+            if (modal) {
+                modal.classList.add("hidden");
+            } else {
+                console.error("Edit Modal not found!");
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <div class="container mx-auto p-6">
+        <!-- Header -->
+        <header class="mb-6 flex justify-between items-center">
+            <h1 class="text-yellow-500 text-3xl font-bold">Inventory Management</h1>
+            <a href="{% url 'manager_dashboard' %}" class="text-blue-400 hover:text-blue-300 underline">← Back to Dashboard</a>
+        </header>
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-3 gap-6">
+            <!-- Current Inventory -->
+            <div class="col-span-2">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-semibold text-white mb-4">Current Inventory</h2>
+                    <div class="flex justify-between items-center mb-4">
+                        <input
+                            type="text"
+                            id="searchInventory"
+                            placeholder="Search inventory..."
+                            class="w-1/2 p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500"
+                            onkeyup="filterInventory()"
+                        >
+                        <button
+                            class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md"
+                            onclick="openAddItemModal()"
+                        >
+                            + Add Item
+                        </button>
+                    </div>
+                    <table id="inventoryTable" class="w-full text-left text-gray-300">
+                        <thead>
+                            <tr class="border-b border-gray-700">
+                                <th class="py-2">Item</th>
+                                <th class="py-2">Quantity</th>
+                                <th class="py-2">Unit</th>
+                                <th class="py-2">Minimum Level</th>
+                                <th class="py-2">Supplier</th>
+                                <th class="py-2">Last Ordered</th>
+                                <th class="py-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in inventory_items %}
+                            <tr class="border-b border-gray-700">
+                                <td class="py-2">{{ item.name }}</td>
+                                <td class="py-2">{{ item.quantity }}</td>
+                                <td class="py-2">{{ item.unit }}</td>
+                                <td class="py-2">{{ item.min_level }}</td>
+                                <td class="py-2">{{ item.supplier }}</td>
+                                <td class="py-2">{{ item.last_ordered }}</td>
+                                <td class="py-2">
+                                    <button
+                                        class="bg-purple-600 hover:bg-purple-500 text-white px-2 py-1 rounded-md"
+                                        onclick="openEditModal('{{ item.id }}', '{{ item.name }}', '{{ item.quantity }}', '{{ item.min_level }}', '{{ item.supplier }}')"
+                                    >
+                                        ✏️ Edit
+                                    </button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-gray-400">No items in inventory</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div>
+                <!-- Low Stock Alert -->
+                <div class="bg-red-600 p-4 rounded-lg shadow-lg mb-6">
+                    <h3 class="text-lg font-semibold text-white">Low Stock Alert</h3>
+                    <p class="text-white mt-2">
+                        {% if low_stock_items %}
+                        <ul>
+                            {% for item in low_stock_items %}
+                            <li>{{ item.name }} ({{ item.quantity }} {{ item.unit }})</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        No items currently low in stock
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- Quick Order Form -->
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <h3 class="text-lg font-semibold text-white mb-4">Quick Order</h3>
+                    <form method="POST" action="{% url 'place_order' %}">
+                        {% csrf_token %}
+                        {{ quick_order_form.non_field_errors }}
+                        <div class="mb-4">
+                            <label for="item" class="block text-gray-300 mb-2">{{ quick_order_form.item.label }}</label>
+                            {{ quick_order_form.item }}
+                        </div>
+                        <div class="mb-4">
+                            <label for="quantity" class="block text-gray-300 mb-2">{{ quick_order_form.quantity.label }}</label>
+                            {{ quick_order_form.quantity }}
+                        </div>
+                        <div class="mb-4">
+                            <label for="supplier" class="block text-gray-300 mb-2">{{ quick_order_form.supplier.label }}</label>
+                            {{ quick_order_form.supplier }}
+                        </div>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md w-full">
+                            🛒 Place Order
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div id="addItemModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+            <h3 class="text-lg font-semibold text-white mb-4">Add New Item</h3>
+            <form method="POST" action="{% url 'add_item' %}">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="addItemName" class="block text-gray-300 mb-2">Item Name</label>
+                    <input
+                        type="text"
+                        id="addItemName"
+                        name="name"
+                        class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500"
+                        required
+                    >
+                </div>
+                <div class="mb-4">
+                    <label for="addQuantity" class="block text-gray-300 mb-2">Quantity</label>
+                    <input
+                        type="number"
+                        id="addQuantity"
+                        name="quantity"
+                        class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500"
+                        required
+                    >
+                </div>
+                <div class="mb-4">
+                    <label for="addUnit" class="block text-gray-300 mb-2">Unit</label>
+                    <input
+                        type="text"
+                        id="addUnit"
+                        name="unit"
+                        class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500"
+                        required
+                    >
+                </div>
+                <div class="mb-4">
+                    <label for="addMinLevel" class="block text-gray-300 mb-2">Minimum Level</label>
+                    <input
+                        type="number"
+                        id="addMinLevel"
+                        name="min_level"
+                        class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500"
+                        required
+                    >
+                </div>
+                <div class="mb-4">
+                    <label for="addSupplier" class="block text-gray-300 mb-2">Supplier</label>
+                    <input
+                        type="text"
+                        id="addSupplier"
+                        name="supplier"
+                        class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500"
+                        required
+                    >
+                </div>
+                <div class="flex justify-end">
+                    <button
+                        type="button"
+                        class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-md mr-2"
+                        onclick="closeAddItemModal()"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md"
+                    >
+                        Add Item
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Item Modal -->
+    <div id="editModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+            <h3 id="editItemName" class="text-lg font-semibold text-white mb-4">Update Inventory</h3>
+            <form method="POST" action="{% url 'update_inventory' %}">
+                {% csrf_token %}
+                <input type="hidden" id="editItemId" name="item_id">
+                <div class="mb-4">
+                    <label for="editQuantity" class="block text-gray-300 mb-2">Quantity</label>
+                    <input
+                        type="number"
+                        id="editQuantity"
+                        name="quantity"
+                        class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500"
+                        required
+                    >
+                </div>
+                <div class="mb-4">
+                    <label for="editMinLevel" class="block text-gray-300 mb-2">Minimum Level</label>
+                    <input
+                        type="number"
+                        id="editMinLevel"
+                        name="min_level"
+                        class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500"
+                        required
+                    >
+                </div>
+                <div class="mb-4">
+                    <label for="editSupplier" class="block text-gray-300 mb-2">Supplier</label>
+                    <input
+                        type="text"
+                        id="editSupplier"
+                        name="supplier"
+                        class="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring focus:ring-yellow-500"
+                        required
+                    >
+                </div>
+                <div class="flex justify-end">
+                    <button
+                        type="button"
+                        class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-md mr-2"
+                        onclick="closeEditModal()"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md"
+                    >
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
