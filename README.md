@@ -1,7 +1,7 @@
 # Restaurant-Management
 Repository for the restaurant management project work (software engineering).
  Instructions on how to run it on your PC:
-
+ PLEASE SCROLL TO THE BOTTOM OF THIS README FILE FOR USERS AND PASSWORDS
 
 ---
 
@@ -107,5 +107,20 @@ Make sure to list these in your `README.md` for the repo:
 1. **Python Version** (e.g., Python 3.10+ recommended).
 2. **Dependencies**: `requirements.txt`.
 3. Instructions for environment setup and running the server.
+
+   Role : Username: password 
+The first three are for the employee portal
+
+Manager: Manager: e44mtyaKfQU3REU  
+
+Waiter: EdwardJay : v8zwisKRwkqFsyM
+
+Chef : chef_pete : MZQ48Q2MzN8cfai
+
+To log in the admin site visit this url while server is running : http://127.0.0.1:8000/admin/
+the username is admin and the password is admin.
+
+This is where you can also add menu items and their pictures .You can also populate all the database tables in the admin site
+If these user accounts are not available you can create your own in the admin site by going to users and creating one then go to the userprofile table to assign a role to the user you would have just created.  You should now be able to login with those user credentials in the employee portal of the site.
 
 
